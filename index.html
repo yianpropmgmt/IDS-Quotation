@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>IDS 室内设计 · 装修报价系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+<title>装修点菜报价系统</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#F6F2E9;
@@ -24,12 +23,11 @@
 }
 *{box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-html,body{
-  margin:0;padding:0;
-  width:100%;
-  max-width:100vw;
-  overflow-x:hidden; /* 严格禁止左右溢出滚动 */
-}
+html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden;}
+.topbar-inner,.brand,.cat-head,.cat-head-left,.cat-meta,.toolbar,.discount-row,
+.controls-line,.qty-control,.item-row,.client-card,.qv-clientbox,.qv-head,.qv-meta,
+.summary-row,.mobar{min-width:0;}
+.brand-text,.cat-title,.item-name,.t1,.t2,.qv-brand,.summary-row .nm{overflow-wrap:break-word;word-break:break-word;}
 body{
   background:var(--paper);
   color:var(--ink);
@@ -39,7 +37,7 @@ body{
     linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
   background-size:34px 34px;
-  background-position:center top; /* 让底纹背景线也居中对齐 */
+  background-position:-1px -1px;
 }
 ::selection{background:var(--brass-light);}
 .mono{font-family:'IBM Plex Mono',monospace;}
@@ -55,11 +53,9 @@ input,select{font-family:inherit;}
   background:var(--navy);
   color:var(--white);
   border-bottom:3px solid var(--brass);
-  width:100%;
 }
 .topbar-inner{
-  max-width:1200px;
-  margin:0 auto;
+  max-width:1280px;margin:0 auto;
   padding:14px 20px;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
 }
@@ -93,22 +89,11 @@ input,select{font-family:inherit;}
 .btn-sm{padding:6px 11px;font-size:12.5px;}
 
 /* ---------- Layout ---------- */
-.wrap{
-  max-width:1200px;
-  margin:0 auto;
-  padding:22px 20px 140px;
-}
-.layout{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:22px;
-  width:100%;
-}
+.wrap{max-width:1280px;margin:0 auto;padding:22px 20px 140px;}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;min-width:0;}
+.layout>div{min-width:0;}
 @media(min-width:980px){
-  .layout{
-    grid-template-columns:1fr 340px;
-    align-items:start;
-  }
+  .layout{grid-template-columns:minmax(0,1fr) 340px;align-items:start;}
 }
 
 /* client info card */
@@ -119,7 +104,6 @@ input,select{font-family:inherit;}
   padding:18px 20px;
 }
 .card + .card{margin-top:16px;}
-.card-title{font-family:'Fraunces',serif;font-size:15px;font-weight:600;margin:0 0 14px;color:var(--navy);}
 .client-card{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px 16px;
 }
@@ -145,10 +129,7 @@ input,select{font-family:inherit;}
 .search-box input:focus{outline:none;border-color:var(--brass);}
 .search-box svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.45;}
 
-.chipnav{
-  display:flex;gap:7px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;
-  max-width: 100%;
-}
+.chipnav{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
 .chipnav::-webkit-scrollbar{height:5px;}
 .chipnav::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
 .chip{
@@ -168,7 +149,6 @@ input,select{font-family:inherit;}
   overflow:hidden;
   scroll-margin-top:120px;
 }
-.category.hidden{display:none;}
 .cat-head{
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 18px;cursor:pointer;
@@ -190,50 +170,51 @@ input,select{font-family:inherit;}
 .category.open .cat-body{display:block;}
 
 .item-row{
-  display:grid;
-  grid-template-columns:1fr auto auto;
-  gap:10px 14px;
+  display:flex;
   align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px 14px;
   padding:11px 18px;
   border-top:1px solid #F1ECE0;
 }
-.item-row.hidden{display:none;}
 .item-row.qtyset{background:#FCF7EE;}
 .item-row:first-child{border-top:none;}
-.item-name{font-size:14px;line-height:1.35;}
-.item-name .en{display:block;font-size:11.5px;color:var(--slate);font-weight:400;margin-top:2px;}
+.item-name{flex:1 1 220px;min-width:0;font-size:14px;line-height:1.35;}
 .item-price{
+  flex:0 0 auto;
   font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--slate);
   text-align:right;white-space:nowrap;
 }
 .item-price b{color:var(--ink);font-weight:600;}
+.controls-line{display:flex;align-items:center;gap:12px;flex:0 0 auto;}
 .qty-control{
-  display:flex;align-items:center;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--paper);
+  display:flex;align-items:center;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--paper);flex:0 0 auto;
 }
 .qty-control button{
   width:28px;height:30px;border:none;background:transparent;font-size:15px;color:var(--navy);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;
 }
 .qty-control button:hover{background:var(--brass-light);}
 .qty-control input{
   width:46px;border:none;background:transparent;text-align:center;font-family:'IBM Plex Mono',monospace;
-  font-size:13.5px;padding:0;-moz-appearance:textfield;
+  font-size:13.5px;padding:0;-moz-appearance:textfield;flex:0 0 auto;
 }
 .qty-control input::-webkit-outer-spin-button,.qty-control input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
 .qty-control input:focus{outline:none;}
 .line-total{
   font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:var(--green);
-  min-width:82px;text-align:right;
+  min-width:82px;text-align:right;flex:0 0 auto;
 }
 .line-total.zero{color:var(--line);font-weight:400;}
 
 @media(max-width:640px){
-  .item-row{grid-template-columns:1fr;grid-template-areas:"name" "controls";row-gap:8px;}
+  .item-row{flex-direction:column;align-items:stretch;}
   .item-price{display:none;}
-  .item-row .controls-line{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .controls-line{width:100%;justify-content:space-between;}
 }
 
-/* compact phone mode */
+/* compact phone mode - tighter type & spacing for small screens */
 @media(max-width:480px){
   .wrap{padding:12px 8px 128px;}
   .topbar-inner{padding:10px 10px;}
@@ -263,7 +244,6 @@ input,select{font-family:inherit;}
 
   .item-row{padding:9px 10px;}
   .item-name{font-size:13px;}
-  .item-name .en{font-size:10px;}
   .qty-control button{width:25px;height:27px;font-size:14px;}
   .qty-control input{width:36px;font-size:12.5px;}
   .line-total{font-size:12.5px;min-width:64px;}
@@ -283,7 +263,6 @@ input,select{font-family:inherit;}
 /* right summary panel (desktop) */
 .summary{
   position:sticky;top:88px;
-  width:100%;
 }
 .summary-title{font-family:'Fraunces',serif;font-size:17px;font-weight:600;margin:0 0 4px;}
 .summary-sub{font-size:12px;color:var(--slate);margin-bottom:14px;}
@@ -302,7 +281,6 @@ input,select{font-family:inherit;}
 .seg button.active{background:var(--navy);color:#fff;}
 .discount-row input{
   flex:1;border:1px solid var(--line);border-radius:7px;padding:7px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;
-  width:100%;
 }
 .discount-row input:focus{outline:none;border-color:var(--brass);}
 
@@ -373,7 +351,6 @@ table.qv-table td.qty,table.qv-table td.price,table.qv-table td.tot{text-align:r
 .qv-totals .grand{border-top:2px solid var(--ink);margin-top:6px;padding-top:8px;font-size:16px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
 .qv-terms{margin-top:34px;font-size:10.5px;color:var(--slate);line-height:1.7;border-top:1px solid var(--line);padding-top:12px;}
 .qv-actions{max-width:820px;margin:0 auto 20px;padding:0 50px;display:flex;gap:10px;}
-.qv-empty{max-width:820px;margin:60px auto;text-align:center;color:var(--slate);font-size:14px;}
 
 @media print{
   body{background:#fff;}
@@ -385,766 +362,549 @@ table.qv-table td.qty,table.qv-table td.price,table.qv-table td.tot{text-align:r
 </style>
 </head>
 <body>
-
-<!-- ========== TOP BAR ========== -->
+<!-- ================= TOP BAR ================= -->
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand">
       <div class="brand-mark">ID</div>
       <div class="brand-text">
-        <div class="t1">IDS 室内设计</div>
-        <div class="t2">Interior · Design · Studio</div>
+        <div class="t1">装修点菜报价系统</div>
+        <div class="t2">Interior Renovation Quotation Menu</div>
       </div>
     </div>
     <div class="topbar-actions">
-      <span class="pill-count mono" id="pillCount">0 项已选</span>
-      <button class="btn btn-ghost btn-sm" id="btnReset">重置</button>
-      <button class="btn btn-brass btn-sm" id="btnQuoteTop">生成报价单</button>
+      <span class="pill-count" id="topCount">0 项已选</span>
+      <button class="btn btn-ghost btn-sm" id="resetBtn">清空重来</button>
     </div>
   </div>
 </div>
 
-<!-- ========== MAIN APP VIEW ========== -->
-<div class="wrap" id="appView">
-
-  <div class="card">
-    <div class="card-title">客户信息 Client Information</div>
-    <div class="client-card">
-      <div class="field"><label>客户姓名</label><input type="text" id="cName" placeholder="请输入姓名"></div>
-      <div class="field"><label>联系电话</label><input type="text" id="cPhone" placeholder="012-3456789"></div>
-      <div class="field"><label>项目地址</label><input type="text" id="cAddress" placeholder="装修地点"></div>
-      <div class="field"><label>报价日期</label><input type="date" id="cDate"></div>
-    </div>
-  </div>
-
+<div class="wrap">
   <div class="layout">
-    <!-- LEFT: items -->
-    <div class="col-main">
+    <!-- ================= LEFT: MENU ================= -->
+    <div>
+      <div class="card client-card" id="clientCard">
+        <div class="field"><label>客户姓名 Client</label><input type="text" id="cf_name" placeholder="客户姓名"></div>
+        <div class="field"><label>联络电话 Phone</label><input type="text" id="cf_phone" placeholder="012-3456789"></div>
+        <div class="field"><label>项目地址 Project Address</label><input type="text" id="cf_address" placeholder="项目地址"></div>
+        <div class="field"><label>报价日期 Date</label><input type="date" id="cf_date"></div>
+        <div class="field"><label>报价编号 Quote No.</label><input type="text" id="cf_quoteno" placeholder="自动生成"></div>
+        <div class="field"><label>负责人 Prepared By</label><input type="text" id="cf_preparer" placeholder="您的名字"></div>
+      </div>
 
       <div class="toolbar">
         <div class="search-box">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="searchInput" placeholder="搜索项目名称…">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" id="searchInput" placeholder="搜索项目，例如 wardrobe / 冷气 / sofa ...">
         </div>
+        <button class="btn btn-outline btn-sm" id="expandAllBtn">全部展开</button>
+        <button class="btn btn-outline btn-sm" id="collapseAllBtn">全部收起</button>
       </div>
+
       <div class="chipnav" id="chipNav"></div>
 
-      <div id="categoryList"></div>
+      <div id="categoryList" style="margin-top:16px;"></div>
 
       <div class="footnote">
-        以上报价仅供参考，实际价格视现场勘察及材料规格而定。<br>
-        本报价单有效期为 14 天，超过期限请重新询价确认。
+        以上单价为参考报价（RM），实际造价按现场勘查及材料版本为准。<br>
+        选择数量后系统会自动计算总价 — 完成后点击右侧「生成报价单」输出可打印 / 保存为 PDF 的正式报价文件。
       </div>
     </div>
 
-    <!-- RIGHT: summary (desktop) -->
-    <div class="col-side">
-      <div class="card summary desktop-summary">
-        <div class="summary-title">报价摘要</div>
-        <div class="summary-sub">已选项目将实时汇总于此</div>
-        <div class="summary-list" id="summaryList"></div>
+    <!-- ================= RIGHT: SUMMARY (desktop) ================= -->
+    <div class="summary desktop-summary">
+      <div class="card">
+        <div class="summary-title">报价单摘要</div>
+        <div class="summary-sub">Order Summary</div>
+        <div class="summary-list" id="summaryList"><div class="summary-empty">尚未选择任何项目<br>请在左侧菜单勾选数量</div></div>
 
         <div class="discount-block">
-          <div class="field"><label>折扣 Discount</label></div>
-          <div class="discount-row" style="margin-top:6px;">
+          <div class="field" style="margin-bottom:8px;"><label>折扣 Discount</label></div>
+          <div class="discount-row">
             <div class="seg">
-              <button type="button" class="active" data-mode="percent">%</button>
-              <button type="button" data-mode="fixed">RM</button>
+              <button id="discPct" class="active" data-type="pct">%</button>
+              <button id="discFix" data-type="fix">RM</button>
             </div>
-            <input type="number" id="discountInput" min="0" value="0" placeholder="0">
+            <input type="number" id="discValue" min="0" value="0" step="1">
           </div>
         </div>
 
         <div class="totals">
-          <div class="trow"><span>小计 Subtotal</span><span class="mono" id="subtotalVal">RM 0.00</span></div>
-          <div class="trow discount-amt"><span>折扣 Discount</span><span class="mono" id="discountVal">- RM 0.00</span></div>
+          <div class="trow"><span>小计 Subtotal</span><span class="mono" id="sumSubtotal">RM 0</span></div>
+          <div class="trow discount-amt"><span>折扣 Discount</span><span class="mono" id="sumDiscount">- RM 0</span></div>
           <div class="grand">
-            <span class="lbl">总计 Total</span>
-            <span class="val mono"><small>RM</small><span id="grandVal">0.00</span></span>
+            <span class="lbl">总价 Total</span>
+            <span class="val" id="sumGrand"><small>RM</small>0</span>
           </div>
         </div>
 
         <div class="summary-cta">
-          <button class="btn btn-brass" id="btnQuoteSide">生成报价单</button>
-          <button class="btn btn-outline" id="btnWa">通过 WhatsApp 发送</button>
+          <button class="btn btn-brass" id="generateBtn" style="justify-content:center;">生成报价单 / 打印</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ========== MOBILE STICKY BAR ========== -->
-<div class="mobar">
+<!-- ================= MOBILE STICKY BAR ================= -->
+<div class="mobar mobile-only">
   <div>
-    <div class="lbl">总计 TOTAL</div>
-    <div class="val mono" id="mobarVal">RM 0.00</div>
+    <div class="lbl">总价 TOTAL (<span id="moCount">0</span> 项)</div>
+    <div class="val mono" id="moTotal">RM 0</div>
   </div>
-  <button class="btn btn-brass btn-sm" id="btnOpenSheet">查看摘要</button>
+  <div style="display:flex;gap:8px;">
+    <button class="btn btn-ghost btn-sm" id="openSheetBtn">查看清单</button>
+    <button class="btn btn-brass btn-sm" id="mobileGenerateBtn">生成报价单</button>
+  </div>
 </div>
 
-<!-- ========== MOBILE SHEET ========== -->
+<!-- ================= MOBILE SUMMARY SHEET ================= -->
 <div class="sheet-backdrop" id="sheetBackdrop"></div>
 <div class="sheet" id="sheet">
   <div class="sheet-handle"></div>
-  <div class="summary-title">报价摘要</div>
-  <div class="summary-sub">已选项目将实时汇总于此</div>
-  <div class="summary-list" id="summaryListMobile"></div>
-
+  <div class="summary-title">报价单摘要</div>
+  <div class="summary-list" id="sheetList" style="max-height:50vh;"><div class="summary-empty">尚未选择任何项目</div></div>
   <div class="discount-block">
-    <div class="field"><label>折扣 Discount</label></div>
-    <div class="discount-row" style="margin-top:6px;">
+    <div class="field" style="margin-bottom:8px;"><label>折扣 Discount</label></div>
+    <div class="discount-row">
       <div class="seg">
-        <button type="button" class="active" data-mode="percent">%</button>
-        <button type="button" data-mode="fixed">RM</button>
+        <button id="discPctM" class="active" data-type="pct">%</button>
+        <button id="discFixM" data-type="fix">RM</button>
       </div>
-      <input type="number" id="discountInputMobile" min="0" value="0" placeholder="0">
+      <input type="number" id="discValueM" min="0" value="0" step="1">
     </div>
   </div>
-
   <div class="totals">
-    <div class="trow"><span>小计 Subtotal</span><span class="mono" id="subtotalValMobile">RM 0.00</span></div>
-    <div class="trow discount-amt"><span>折扣 Discount</span><span class="mono" id="discountValMobile">- RM 0.00</span></div>
-    <div class="grand">
-      <span class="lbl">总计 Total</span>
-      <span class="val mono"><small>RM</small><span id="grandValMobile">0.00</span></span>
-    </div>
+    <div class="trow"><span>小计 Subtotal</span><span class="mono" id="sumSubtotalM">RM 0</span></div>
+    <div class="trow discount-amt"><span>折扣 Discount</span><span class="mono" id="sumDiscountM">- RM 0</span></div>
+    <div class="grand"><span class="lbl">总价 Total</span><span class="val" id="sumGrandM"><small>RM</small>0</span></div>
   </div>
-
-  <div class="summary-cta">
-    <button class="btn btn-brass" id="btnQuoteMobile">生成报价单</button>
-    <button class="btn btn-outline" id="btnWaMobile">通过 WhatsApp 发送</button>
-    <button class="btn btn-ghost" id="btnCloseSheet" style="color:var(--navy);border:1px solid var(--line);">关闭</button>
-  </div>
+  <button class="btn btn-brass" id="sheetGenerateBtn" style="width:100%;justify-content:center;margin-top:14px;">生成报价单 / 打印</button>
+  <button class="btn btn-outline" id="closeSheetBtn" style="width:100%;justify-content:center;margin-top:8px;">继续选购</button>
 </div>
 
-<!-- ========== PRINT / QUOTE VIEW ========== -->
+<!-- ================= PRINTABLE QUOTE VIEW ================= -->
 <div id="quoteView">
   <div class="qv-actions">
-    <button class="btn btn-outline" id="btnBackToApp">&larr; 返回编辑</button>
-    <button class="btn btn-brass" id="btnPrint">打印 / 保存为 PDF</button>
+    <button class="btn btn-outline" id="backToEditBtn">← 返回编辑</button>
+    <button class="btn btn-brass" id="printBtn">打印 / 保存为 PDF</button>
   </div>
   <div class="qv-page" id="qvPage"></div>
 </div>
 
 <script>
-/* ================== 数据（来自 IDS_Quotation_Template.xlsx，已按要求移除 Commission 项） ================== */
-const CATEGORIES = [
-  { id:"foyer", num:"01", title:"玄关", en:"Foyer", items:[
-    { id:"foyer-smart-lock", name:"智能门锁", nameEn:"Smart lock", unit:"每个", price:1200 },
-    { id:"foyer-grill-door", name:"铁闸门", nameEn:"Grill Door", unit:"每个", price:1500 },
-    { id:"foyer-loose-shoe-cabinet", name:"活动鞋柜", nameEn:"Loose shoe cabinet", unit:"每尺", price:400 },
-    { id:"foyer-build-in-shoe-cabinet-ft", name:"订制入墙鞋柜", nameEn:"Build in Shoe cabinet (ft)", unit:"每尺", price:550 },
-  ]},
-  { id:"living-area", num:"02", title:"客厅", en:"Living area", items:[
-    { id:"living-area-loose-tv-console", name:"活动电视柜", nameEn:"Loose tv console", unit:"每尺", price:900 },
-    { id:"living-area-loose-tv-console-veneer", name:"活动电视柜（木皮）", nameEn:"Loose tv console veneer", unit:"每尺", price:1500 },
-    { id:"living-area-3-seater-sofa", name:"三人沙发", nameEn:"3 seater sofa", unit:"每个", price:2500 },
-    { id:"living-area-3-seater-sofa-premium", name:"三人沙发（升级款）", nameEn:"3 seater sofa premium", unit:"每个", price:3200 },
-    { id:"living-area-coffee-table", name:"茶几", nameEn:"coffee table", unit:"每个", price:500 },
-    { id:"living-area-tv-console-build-in", name:"订制入墙电视柜", nameEn:"TV Console build in", unit:"每尺", price:340 },
-    { id:"living-area-display-tall-cabinet", name:"展示高柜", nameEn:"Display tall cabinet", unit:"每尺", price:500 },
-    { id:"living-area-display-tall-cabinet-end-panel-pieces", name:"展示高柜侧板", nameEn:"Display tall cabinet end panel (pieces)", unit:"每尺", price:300 },
-    { id:"living-area-display-tall-cabinet-glass-door", name:"展示高柜玻璃门", nameEn:"Display tall cabinet glass door", unit:"每尺", price:60 },
-    { id:"living-area-display-tall-cabinet-led", name:"展示高柜灯带", nameEn:"Display tall cabinet led", unit:"每尺", price:400 },
-    { id:"living-area-tv-back-panel-8ft-l-x6ft-h-loose", name:"电视背景墙（8尺x6尺，活动式）", nameEn:"TV Back panel 8ft L x6ft H loose", unit:"每个", price:1800 },
-    { id:"living-area-tv-back-panel-build-in-min-24-sf", name:"订制电视背景墙（最少24平方尺）", nameEn:"TV Back panel build in (min 24 sf)", unit:"每尺", price:50 },
-    { id:"living-area-tatami", name:"塌塌米", nameEn:"tatami", unit:"每尺", price:50 },
-  ]},
-  { id:"curtain", num:"03", title:"窗帘", en:"Curtain", items:[
-    { id:"curtain-single-layer", name:"单层窗帘", nameEn:"Single layer", unit:"每个", price:2200 },
-    { id:"curtain-double-layer", name:"双层窗帘", nameEn:"Double layer", unit:"每个", price:2800 },
-    { id:"curtain-zebra-blind", name:"斑马帘", nameEn:"Zebra blind", unit:"每个", price:500 },
-  ]},
-  { id:"air-conditioner", num:"04", title:"冷气工程", en:"Air conditioner", items:[
-    { id:"air-conditioner-haier-1-0-non-inverter", name:"海尔1.0匹定频冷气机", nameEn:"Haier 1.0 non inverter", unit:"每个", price:1500 },
-    { id:"air-conditioner-haier-1-0-non-inverter-piping", name:"海尔1.0匹定频冷气机（含铜管安装）", nameEn:"Haier 1.0 non inverter + piping", unit:"每个", price:1900 },
-    { id:"air-conditioner-install-aircon", name:"冷气机安装", nameEn:"install aircon", unit:"每个", price:250 },
-    { id:"air-conditioner-install-aircon-piping-6ft", name:"冷气机安装（含6尺铜管）", nameEn:"install aircon + piping (6ft)", unit:"每个", price:400 },
-    { id:"air-conditioner-aircon-piping-extra-ft", name:"冷气铜管加长", nameEn:"aircon piping extra (ft)", unit:"每尺", price:25 },
-  ]},
-  { id:"fan", num:"05", title:"风扇", en:"Fan", items:[
-    { id:"fan-install-fan", name:"风扇安装", nameEn:"install fan", unit:"每个", price:80 },
-    { id:"fan-fan-with-remote-56-inch", name:"56寸遥控风扇", nameEn:"fan with remote 56 inch", unit:"每个", price:400 },
-    { id:"fan-fan-with-remote-46-inch", name:"46寸遥控风扇", nameEn:"fan with remote 46 inch", unit:"每个", price:450 },
-    { id:"fan-2-in1-fan-46", name:"46寸二合一风扇", nameEn:"2 in1 fan 46", unit:"每个", price:450 },
-  ]},
-  { id:"lighting", num:"06", title:"灯饰工程", en:"Lighting", items:[
-    { id:"lighting-install-light", name:"灯具安装", nameEn:"install light", unit:"每个", price:30 },
-    { id:"lighting-surface-lighting-12w-8-inch", name:"12W吸顶灯（8寸）", nameEn:"surface lighting 12W (8 inch )", unit:"每个", price:60 },
-    { id:"lighting-surface-lighting-18w-8-inch", name:"18W吸顶灯（8寸）", nameEn:"surface lighting 18W (8 inch )", unit:"每个", price:60 },
-    { id:"lighting-downlight-6-inch", name:"6寸筒灯", nameEn:"downlight ( 6 inch )", unit:"每个", price:60 },
-    { id:"lighting-track-light", name:"轨道灯", nameEn:"track light", unit:"每个", price:80 },
-    { id:"lighting-door-bell", name:"门铃", nameEn:"door bell", unit:"每个", price:80 },
-    { id:"lighting-led-strip", name:"LED灯带", nameEn:"led strip", unit:"每个", price:300 },
-    { id:"lighting-magnetic-light", name:"磁吸灯", nameEn:"magnetic light", unit:"每个", price:300 },
-    { id:"lighting-supply-install-new-socket-13a", name:"新装13A插座", nameEn:"supply & install new socket 13A", unit:"每个", price:150 },
-    { id:"lighting-supply-install-new-socket-16a", name:"新装16A插座", nameEn:"supply & install new socket 16A", unit:"每个", price:150 },
-    { id:"lighting-supply-install-new-socket-20a", name:"新装20A插座", nameEn:"supply & install new socket 20A", unit:"每个", price:150 },
-    { id:"lighting-supply-install-new-2-gang-switch", name:"新装双联开关", nameEn:"supply & install new 2 gang switch", unit:"每个", price:150 },
-    { id:"lighting-supply-install-new-3-gang-switch", name:"新装三联开关", nameEn:"supply & install new 3 gang switch", unit:"每个", price:150 },
-    { id:"lighting-supply-install-new-4-gang-switch", name:"新装四联开关", nameEn:"supply & install new 4 gang switch", unit:"每个", price:150 },
-  ]},
-  { id:"plaster-partition", num:"07", title:"批荡与隔间", en:"Plaster/Partition", items:[
-    { id:"plaster-partition-partition-sf", name:"隔墙", nameEn:"Partition (sf)", unit:"每尺", price:28 },
-    { id:"plaster-partition-submeter-unit", name:"独立电表", nameEn:"Submeter (unit)", unit:"每个", price:330 },
-    { id:"plaster-partition-plaster-ceiling-sf", name:"石膏天花", nameEn:"Plaster ceiling (sf)", unit:"每尺", price:7 },
-  ]},
-  { id:"painting", num:"08", title:"油漆工程", en:"Painting", items:[
-    { id:"painting-feature-wall", name:"主题墙油漆", nameEn:"Feature wall", unit:"每个", price:500 },
-    { id:"painting-whole-house", name:"全屋油漆", nameEn:"whole house", unit:"每个", price:3000 },
-    { id:"painting-3ft-fluted-wall-panel-with-led", name:"3尺凹凸木纹墙板（含灯带）", nameEn:"3ft Fluted wall panel with led", unit:"每个", price:900 },
-    { id:"painting-pu-stone-board-10x10ft", name:"PU石纹板（10x10尺）", nameEn:"PU stone board (10x10ft)", unit:"每个", price:1700 },
-  ]},
-  { id:"dining", num:"09", title:"餐厅", en:"Dining", items:[
-    { id:"dining-dining-table-chair", name:"餐桌椅", nameEn:"Dining table & chair", unit:"每个", price:900 },
-    { id:"dining-chair", name:"餐椅", nameEn:"chair", unit:"每个", price:150 },
-    { id:"dining-dining-table-chair-6-seater", name:"餐桌椅（六人座）", nameEn:"Dining table & chair 6 seater", unit:"每个", price:1200 },
-    { id:"dining-pendant-light", name:"吊灯", nameEn:"Pendant light", unit:"每个", price:300 },
-  ]},
-  { id:"bathroom", num:"10", title:"浴室", en:"Bathroom", items:[
-    { id:"bathroom-water-heater-joven-panasonic", name:"热水器（Joven/Panasonic）", nameEn:"Water Heater joven / panasonic", unit:"每个", price:400 },
-    { id:"bathroom-wall-cabinet-mirror-plywood", name:"壁柜连镜子（夹板）", nameEn:"wall cabinet & mirror (plywood)", unit:"每个", price:400 },
-    { id:"bathroom-sink-cabinet", name:"洗手盆柜", nameEn:"sink cabinet", unit:"每个", price:500 },
-    { id:"bathroom-quartz-stone-top-with-vanity", name:"石英石台面连洗手盆柜", nameEn:"quartz stone top with vanity", unit:"每个", price:500 },
-    { id:"bathroom-mirror-and-tower-rack", name:"镜子连毛巾架", nameEn:"Mirror and tower rack", unit:"每个", price:100 },
-    { id:"bathroom-shower-screen", name:"淋浴屏风", nameEn:"Shower Screen", unit:"每个", price:1200 },
-  ]},
-  { id:"kitchen", num:"11", title:"厨房", en:"Kitchen", items:[
-    { id:"kitchen-base-unit-with-quartz-stone", name:"石英石台面底柜", nameEn:"Base unit with quartz stone", unit:"每尺", price:550 },
-    { id:"kitchen-plumbing-and-electrician-1-job", name:"水电工程（一项）", nameEn:"Plumbing and Electrician (1 Job)", unit:"每个", price:520 },
-    { id:"kitchen-kitchen-backsplash-1-job", name:"厨房防溅墙（一项）", nameEn:"Kitchen Backsplash (1 Job)", unit:"每个", price:450 },
-    { id:"kitchen-build-in-dish-rack", name:"入墙碗碟架", nameEn:"Build in dish rack", unit:"每个", price:150 },
-    { id:"kitchen-wall-unit-700m-h", name:"吊柜（700mm高）", nameEn:"Wall unit 700m H", unit:"每尺", price:380 },
-    { id:"kitchen-wall-unit-full-height-h", name:"吊柜（全高）", nameEn:"Wall unit full height H", unit:"每尺", price:500 },
-    { id:"kitchen-box-up-wall-unit", name:"吊柜包边", nameEn:"Box up wall unit", unit:"每尺", price:300 },
-    { id:"kitchen-tall-unit", name:"高柜", nameEn:"Tall unit", unit:"每尺", price:500 },
-    { id:"kitchen-tall-unit-end-panel", name:"高柜侧板", nameEn:"Tall unit end panel", unit:"每尺", price:300 },
-    { id:"kitchen-island", name:"中岛台", nameEn:"Island", unit:"每尺", price:570 },
-    { id:"kitchen-sink", name:"洗涤盆", nameEn:"Sink", unit:"每个", price:700 },
-    { id:"kitchen-bifold-door", name:"折叠门", nameEn:"Bifold door", unit:"每个", price:1600 },
-  ]},
-  { id:"yard", num:"12", title:"后院", en:"Yard", items:[
-    { id:"yard-grill", name:"铁花", nameEn:"Grill", unit:"每个", price:1600 },
-    { id:"yard-glass-window", name:"玻璃窗", nameEn:"Glass window", unit:"每个", price:1600 },
-    { id:"yard-base-unit-with-quartz-stone", name:"石英石台面底柜", nameEn:"Base unit with quartz stone", unit:"每尺", price:550 },
-    { id:"yard-wall-unit", name:"吊柜", nameEn:"Wall unit", unit:"每尺", price:380 },
-    { id:"yard-exhaust-fan", name:"抽风扇", nameEn:"Exhaust fan", unit:"每个", price:150 },
-    { id:"yard-sink", name:"洗涤盆", nameEn:"Sink", unit:"每个", price:700 },
-    { id:"yard-invisible-grill", name:"隐形铁花", nameEn:"invisible grill", unit:"每个", price:1600 },
-  ]},
-  { id:"master-room", num:"13", title:"主人房", en:"Master room", items:[
-    { id:"master-room-king-size-divan-mattress", name:"特大床架连床垫", nameEn:"King Size divan & mattress", unit:"每个", price:1800 },
-    { id:"master-room-queen-size-divan-mattress", name:"大床架连床垫", nameEn:"Queen Size divan & mattress", unit:"每个", price:1800 },
-    { id:"master-room-loose-study-table-chair", name:"活动书桌椅", nameEn:"Loose study table & chair", unit:"每个", price:400 },
-    { id:"master-room-loose-4x6-ft-wardrobe", name:"活动衣柜（4x6尺）", nameEn:"Loose 4x6 ft wardrobe", unit:"每个", price:800 },
-    { id:"master-room-loose-4x8-ft-wardrobe", name:"活动衣柜（4x8尺）", nameEn:"Loose 4x8 ft wardrobe", unit:"每个", price:1200 },
-    { id:"master-room-swing-door-wardrobe-ft", name:"开门衣柜", nameEn:"Swing door wardrobe (ft)", unit:"每尺", price:700 },
-    { id:"master-room-sliding-door-wardrobe-ft", name:"趟门衣柜", nameEn:"Sliding door wardrobe (ft)", unit:"每尺", price:800 },
-    { id:"master-room-side-table-unit", name:"床头柜", nameEn:"Side table (unit)", unit:"每个", price:240 },
-    { id:"master-room-headboard-sf", name:"床头板", nameEn:"Headboard (sf)", unit:"每尺", price:70 },
-    { id:"master-room-tatami-platform-sf", name:"塌塌米平台", nameEn:"Tatami platform (sf)", unit:"每尺", price:52 },
-    { id:"master-room-tatami-drawers-unit", name:"塌塌米抽屉", nameEn:"Tatami drawers (unit)", unit:"每个", price:100 },
-    { id:"master-room-dresser-table-ft", name:"梳妆台", nameEn:"Dresser table (ft)", unit:"每尺", price:300 },
-    { id:"master-room-study-table-ft", name:"书桌", nameEn:"Study table (ft)", unit:"每尺", price:300 },
-    { id:"master-room-study-table-drawers-unit", name:"书桌抽屉", nameEn:"Study table drawers (unit)", unit:"每个", price:200 },
-    { id:"master-room-base-unit-wardrobe-ft", name:"衣柜底柜", nameEn:"Base unit wardrobe (ft)", unit:"每尺", price:400 },
-  ]},
-  { id:"bedroom2", num:"14", title:"睡房2", en:"Bedroom2", items:[
-    { id:"bedroom2-queen-size-divan-mattress", name:"大床架连床垫", nameEn:"Queen Size divan & mattress", unit:"每个", price:1800 },
-    { id:"bedroom2-loose-study-table-chair", name:"活动书桌椅", nameEn:"Loose study table & chair", unit:"每个", price:400 },
-    { id:"bedroom2-loose-4x6-ft-wardrobe", name:"活动衣柜（4x6尺）", nameEn:"Loose 4x6 ft wardrobe", unit:"每个", price:800 },
-    { id:"bedroom2-loose-4x8-ft-wardrobe", name:"活动衣柜（4x8尺）", nameEn:"Loose 4x8 ft wardrobe", unit:"每个", price:1200 },
-    { id:"bedroom2-swing-door-wardrobe-ft", name:"开门衣柜", nameEn:"Swing door wardrobe (ft)", unit:"每尺", price:700 },
-    { id:"bedroom2-sliding-door-wardrobe-ft", name:"趟门衣柜", nameEn:"Sliding door wardrobe (ft)", unit:"每尺", price:800 },
-    { id:"bedroom2-sliding-door-glass-sf", name:"趟门玻璃", nameEn:"Sliding door glass (sf)", unit:"每尺", price:0 },
-    { id:"bedroom2-side-table-unit", name:"床头柜", nameEn:"Side table (unit)", unit:"每个", price:240 },
-    { id:"bedroom2-headboard-sf", name:"床头板", nameEn:"Headboard (sf)", unit:"每尺", price:70 },
-    { id:"bedroom2-tatami-platform-sf", name:"塌塌米平台", nameEn:"Tatami platform (sf)", unit:"每尺", price:52 },
-    { id:"bedroom2-tatami-drawers-unit", name:"塌塌米抽屉", nameEn:"Tatami drawers (unit)", unit:"每个", price:100 },
-    { id:"bedroom2-dresser-table-ft", name:"梳妆台", nameEn:"Dresser table (ft)", unit:"每尺", price:300 },
-    { id:"bedroom2-study-table-ft", name:"书桌", nameEn:"Study table (ft)", unit:"每尺", price:300 },
-    { id:"bedroom2-study-table-drawers-unit", name:"书桌抽屉", nameEn:"Study table drawers (unit)", unit:"每个", price:200 },
-    { id:"bedroom2-base-unit-wardrobe-ft", name:"衣柜底柜", nameEn:"Base unit wardrobe (ft)", unit:"每尺", price:400 },
-  ]},
-  { id:"bedroom3", num:"15", title:"睡房3", en:"Bedroom3", items:[
-    { id:"bedroom3-queen-size-divan-mattress", name:"大床架连床垫", nameEn:"Queen Size divan & mattress", unit:"每个", price:1800 },
-    { id:"bedroom3-loose-study-table-chair", name:"活动书桌椅", nameEn:"Loose study table & chair", unit:"每个", price:400 },
-    { id:"bedroom3-loose-4x6-ft-wardrobe", name:"活动衣柜（4x6尺）", nameEn:"Loose 4x6 ft wardrobe", unit:"每个", price:800 },
-    { id:"bedroom3-loose-4x8-ft-wardrobe", name:"活动衣柜（4x8尺）", nameEn:"Loose 4x8 ft wardrobe", unit:"每个", price:1200 },
-    { id:"bedroom3-swing-door-wardrobe-ft", name:"开门衣柜", nameEn:"Swing door wardrobe (ft)", unit:"每尺", price:700 },
-    { id:"bedroom3-sliding-door-wardrobe-ft", name:"趟门衣柜", nameEn:"Sliding door wardrobe (ft)", unit:"每尺", price:800 },
-    { id:"bedroom3-side-table-unit", name:"床头柜", nameEn:"Side table (unit)", unit:"每个", price:240 },
-    { id:"bedroom3-headboard-sf", name:"床头板", nameEn:"Headboard (sf)", unit:"每尺", price:70 },
-    { id:"bedroom3-tatami-platform-sf", name:"塌塌米平台", nameEn:"Tatami platform (sf)", unit:"每尺", price:52 },
-    { id:"bedroom3-tatami-drawers-unit", name:"塌塌米抽屉", nameEn:"Tatami drawers (unit)", unit:"每个", price:100 },
-    { id:"bedroom3-dresser-table-ft", name:"梳妆台", nameEn:"Dresser table (ft)", unit:"每尺", price:300 },
-    { id:"bedroom3-study-table-ft", name:"书桌", nameEn:"Study table (ft)", unit:"每尺", price:300 },
-    { id:"bedroom3-study-table-drawers-unit", name:"书桌抽屉", nameEn:"Study table drawers (unit)", unit:"每个", price:200 },
-    { id:"bedroom3-base-unit-wardrobe-ft", name:"衣柜底柜", nameEn:"Base unit wardrobe (ft)", unit:"每尺", price:400 },
-  ]},
-  { id:"bedroom4", num:"16", title:"睡房4", en:"Bedroom4", items:[
-    { id:"bedroom4-queen-size-divan-mattress", name:"大床架连床垫", nameEn:"Queen Size divan & mattress", unit:"每个", price:1800 },
-    { id:"bedroom4-loose-study-table-chair", name:"活动书桌椅", nameEn:"Loose study table & chair", unit:"每个", price:400 },
-    { id:"bedroom4-loose-4x6-ft-wardrobe", name:"活动衣柜（4x6尺）", nameEn:"Loose 4x6 ft wardrobe", unit:"每个", price:800 },
-    { id:"bedroom4-loose-4x8-ft-wardrobe", name:"活动衣柜（4x8尺）", nameEn:"Loose 4x8 ft wardrobe", unit:"每个", price:1200 },
-    { id:"bedroom4-swing-door-wardrobe-ft", name:"开门衣柜", nameEn:"Swing door wardrobe (ft)", unit:"每尺", price:700 },
-    { id:"bedroom4-sliding-door-wardrobe-ft", name:"趟门衣柜", nameEn:"Sliding door wardrobe (ft)", unit:"每尺", price:800 },
-    { id:"bedroom4-side-table-unit", name:"床头柜", nameEn:"Side table (unit)", unit:"每个", price:240 },
-    { id:"bedroom4-headboard-sf", name:"床头板", nameEn:"Headboard (sf)", unit:"每尺", price:70 },
-    { id:"bedroom4-tatami-platform-sf", name:"塌塌米平台", nameEn:"Tatami platform (sf)", unit:"每尺", price:52 },
-    { id:"bedroom4-tatami-drawers-unit", name:"塌塌米抽屉", nameEn:"Tatami drawers (unit)", unit:"每个", price:100 },
-    { id:"bedroom4-dresser-table-ft", name:"梳妆台", nameEn:"Dresser table (ft)", unit:"每尺", price:300 },
-    { id:"bedroom4-study-table-ft", name:"书桌", nameEn:"Study table (ft)", unit:"每尺", price:300 },
-    { id:"bedroom4-study-table-drawers-unit", name:"书桌抽屉", nameEn:"Study table drawers (unit)", unit:"每个", price:200 },
-    { id:"bedroom4-base-unit-wardrobe-ft", name:"衣柜底柜", nameEn:"Base unit wardrobe (ft)", unit:"每尺", price:400 },
-  ]},
-  { id:"electrical-appliances", num:"17", title:"电器", en:"Electrical Appliances", items:[
-    { id:"electrical-appliances-hood-hob", name:"抽油烟机连煮食炉", nameEn:"Hood & hob", unit:"每个", price:1400 },
-    { id:"electrical-appliances-portable-hob", name:"手提电磁炉", nameEn:"Portable Hob", unit:"每个", price:350 },
-    { id:"electrical-appliances-fridge-midea-200l", name:"美的冰箱200L", nameEn:"Fridge Midea 200L", unit:"每个", price:1100 },
-    { id:"electrical-appliances-fridge-midea-280l", name:"美的冰箱280L", nameEn:"Fridge Midea 280L", unit:"每个", price:1200 },
-    { id:"electrical-appliances-fridge-sharp-280l", name:"夏普冰箱280L", nameEn:"Fridge Sharp 280L", unit:"每个", price:1400 },
-    { id:"electrical-appliances-fridge-toshiba-360l", name:"东芝冰箱360L", nameEn:"Fridge Toshiba 360L", unit:"每个", price:2000 },
-    { id:"electrical-appliances-washing-machine-sharp-7-5kg", name:"夏普洗衣机7.5kg", nameEn:"Washing machine Sharp 7.5kg", unit:"每个", price:1000 },
-    { id:"electrical-appliances-dryer-toshiba-7-0kg", name:"东芝干衣机7.0kg", nameEn:"Dryer Toshiba 7.0kg", unit:"每个", price:1100 },
-    { id:"electrical-appliances-2in1-washer-dryer-hisense", name:"海信二合一洗干机", nameEn:"2in1 Washer Dryer Hisense", unit:"每个", price:2200 },
-    { id:"electrical-appliances-microwave", name:"微波炉", nameEn:"Microwave", unit:"每个", price:450 },
-    { id:"electrical-appliances-water-dispenser", name:"饮水机", nameEn:"Water dispenser", unit:"每个", price:600 },
-    { id:"electrical-appliances-smart-tv-43", name:"43寸智能电视", nameEn:"Smart TV 43\"", unit:"每个", price:1600 },
-    { id:"electrical-appliances-standing-steam-iron-simplus", name:"立式蒸汽熨斗（Simplus）", nameEn:"Standing Steam Iron (Simplus)", unit:"每个", price:150 },
-    { id:"electrical-appliances-hairdryer-simplus", name:"吹风机（Simplus）", nameEn:"Hairdryer (Simplus)", unit:"每个", price:100 },
-    { id:"electrical-appliances-rice-cooker", name:"电饭锅", nameEn:"Rice Cooker", unit:"每个", price:200 },
-  ]},
-  { id:"airbnb-decoration-setup-item", num:"18", title:"Airbnb 装饰摆设", en:"Airbnb Decoration & Setup Item", items:[
-    { id:"airbnb-decoration-setup-item-standing-light", name:"落地灯", nameEn:"Standing Light", unit:"每个", price:200 },
-    { id:"airbnb-decoration-setup-item-side-table-lamp", name:"床头台灯", nameEn:"Side Table Lamp", unit:"每个", price:90 },
-    { id:"airbnb-decoration-setup-item-kitchen-floor-mat-40cm-x-120cm", name:"厨房地垫（40x120cm）", nameEn:"Kitchen - Floor Mat (40cm x 120cm)", unit:"每个", price:70 },
-    { id:"airbnb-decoration-setup-item-bathroom-floor-mat-40cm-x-60cm", name:"浴室地垫（40x60cm）", nameEn:"Bathroom - Floor Mat (40cm x 60cm)", unit:"每个", price:40 },
-    { id:"airbnb-decoration-setup-item-entrance-floor-mat", name:"门口地垫", nameEn:"Entrance - Floor Mat", unit:"每个", price:120 },
-    { id:"airbnb-decoration-setup-item-wall-art-canvas-50cm-x-70cm-h", name:"装饰画（50x70cm）", nameEn:"Wall Art Canvas [50cm x 70cm (H)]", unit:"每个", price:160 },
-    { id:"airbnb-decoration-setup-item-wall-art-canvas-40cm-x-50cm-h", name:"装饰画（40x50cm）", nameEn:"Wall Art Canvas [40cm x 50cm (H)]", unit:"每个", price:110 },
-    { id:"airbnb-decoration-setup-item-wall-art-canvas-30cm-x-40cm-h", name:"装饰画（30x40cm）", nameEn:"Wall Art Canvas [30cm x 40cm (H)]", unit:"每个", price:70 },
-    { id:"airbnb-decoration-setup-item-artificial-fake-plant-olive-160cm", name:"仿真橄榄树（160cm）", nameEn:"Artificial Fake Plant - Olive (160cm)", unit:"每个", price:180 },
-    { id:"airbnb-decoration-setup-item-artificial-fake-plant-others-120cm", name:"仿真植物-其他（120cm）", nameEn:"Artificial Fake Plant - Others (120cm)", unit:"每个", price:150 },
-    { id:"airbnb-decoration-setup-item-universal-extension-plug", name:"万能拖线板", nameEn:"Universal Extension Plug", unit:"每个", price:100 },
-    { id:"airbnb-decoration-setup-item-carpet-rug-260cm-l-x-180cm-w", name:"地毯（260x180cm）", nameEn:"Carpet Rug (260cm L x 180cm W)", unit:"每个", price:110 },
-    { id:"airbnb-decoration-setup-item-modern-mirror", name:"现代风格镜子", nameEn:"Modern Mirror", unit:"每个", price:250 },
-    { id:"airbnb-decoration-setup-item-multiple-small-decoration-item-sets", name:"小型装饰摆件（套装）", nameEn:"Multiple Small Decoration Item (Sets)", unit:"每个", price:350 },
-    { id:"airbnb-decoration-setup-item-shampoo-bottle-holder", name:"洗发水置物架", nameEn:"Shampoo Bottle Holder", unit:"每个", price:10 },
-    { id:"airbnb-decoration-setup-item-shampoo-bottle-dispenser", name:"洗发水分装瓶", nameEn:"Shampoo Bottle Dispenser", unit:"每个", price:20 },
-    { id:"airbnb-decoration-setup-item-rubbish-bin", name:"垃圾桶", nameEn:"Rubbish Bin", unit:"每个", price:30 },
-    { id:"airbnb-decoration-setup-item-laundry-basket", name:"洗衣篮", nameEn:"Laundry Basket", unit:"每个", price:40 },
-  ]},
-  { id:"airbnb-linens", num:"19", title:"Airbnb 床品布草", en:"Airbnb Linens", items:[
-    { id:"airbnb-linens-flat-bedsheets-king", name:"平铺床单（特大）", nameEn:"Flat Bedsheets (King)", unit:"每个", price:120 },
-    { id:"airbnb-linens-duvet-cover-king", name:"被套（特大）", nameEn:"Duvet Cover (King)", unit:"每个", price:180 },
-    { id:"airbnb-linens-duvet-insert-king", name:"棉被内胆（特大）", nameEn:"Duvet Insert (King)", unit:"每个", price:180 },
-    { id:"airbnb-linens-mattress-protector-king", name:"床垫保护套（特大）", nameEn:"Mattress Protector (King)", unit:"每个", price:90 },
-    { id:"airbnb-linens-flat-bedsheets-queen", name:"平铺床单（大）", nameEn:"Flat Bedsheets (Queen)", unit:"每个", price:80 },
-    { id:"airbnb-linens-duvet-cover-queen", name:"被套（大）", nameEn:"Duvet Cover (Queen)", unit:"每个", price:140 },
-    { id:"airbnb-linens-duvet-insert-queen", name:"棉被内胆（大）", nameEn:"Duvet Insert (Queen)", unit:"每个", price:100 },
-    { id:"airbnb-linens-mattress-protector-queen", name:"床垫保护套（大）", nameEn:"Mattress Protector (Queen)", unit:"每个", price:60 },
-    { id:"airbnb-linens-flat-bedsheets-single", name:"平铺床单（单人）", nameEn:"Flat Bedsheets (Single)", unit:"每个", price:0 },
-    { id:"airbnb-linens-duvet-cover-single", name:"被套（单人）", nameEn:"Duvet Cover (Single)", unit:"每个", price:0 },
-    { id:"airbnb-linens-duvet-insert-single", name:"棉被内胆（单人）", nameEn:"Duvet Insert (Single)", unit:"每个", price:0 },
-    { id:"airbnb-linens-mattress-protector-single", name:"床垫保护套（单人）", nameEn:"Mattress Protector (Single)", unit:"每个", price:0 },
-    { id:"airbnb-linens-pillow-case", name:"枕套", nameEn:"Pillow Case", unit:"每个", price:15 },
-    { id:"airbnb-linens-pillow-polyfibre", name:"聚纤枕芯", nameEn:"Pillow Polyfibre", unit:"每个", price:50 },
-    { id:"airbnb-linens-bath-towel-white", name:"白色浴巾", nameEn:"Bath Towel White", unit:"每个", price:30 },
-  ]},
-  { id:"kitchen-utensils", num:"20", title:"厨房用具", en:"Kitchen Utensils", items:[
-    { id:"kitchen-utensils-cooking-utensils-4pcs-set", name:"厨具四件套", nameEn:"Cooking Utensils (4Pcs Set)", unit:"每个", price:40 },
-    { id:"kitchen-utensils-chopping-board", name:"砧板", nameEn:"Chopping Board", unit:"每个", price:50 },
-    { id:"kitchen-utensils-spoon-fork-teaspoon-chopstick", name:"匙羹叉子筷子套装", nameEn:"Spoon, Fork, Teaspoon, Chopstick", unit:"每个", price:60 },
-    { id:"kitchen-utensils-cutlery-tray", name:"餐具收纳盒", nameEn:"Cutlery Tray", unit:"每个", price:50 },
-    { id:"kitchen-utensils-drinking-glass", name:"玻璃杯", nameEn:"Drinking Glass", unit:"每个", price:20 },
-    { id:"kitchen-utensils-8-plate", name:"8寸餐盘", nameEn:"8'' Plate", unit:"每个", price:20 },
-    { id:"kitchen-utensils-6-bowl", name:"6寸碗", nameEn:"6'' Bowl", unit:"每个", price:20 },
-    { id:"kitchen-utensils-knife-set-5-pcs", name:"刀具五件套", nameEn:"Knife Set (5 Pcs)", unit:"每个", price:120 },
-    { id:"kitchen-utensils-frying-pan-26cm", name:"平底煎锅（26cm）", nameEn:"Frying Pan (26cm)", unit:"每个", price:80 },
-    { id:"kitchen-utensils-cooking-pot-18cm", name:"汤锅（18cm）", nameEn:"Cooking Pot (18cm)", unit:"每个", price:80 },
-  ]},
-  { id:"preliminaries", num:"21", title:"前期与杂项工程", en:"Preliminaries", items:[
-    { id:"preliminaries-site-protection-protection-of-material-a", name:"现场及成品保护、施工废料清运（一项）", nameEn:"Site protection, protection of material  and completed works.  Site cleaning and cart away debris.", unit:"每项", price:1200 },
-    { id:"preliminaries-deco", name:"软装布置", nameEn:"Deco", unit:"每项", price:0 },
-    { id:"preliminaries-bedsheet", name:"床品", nameEn:"Bedsheet", unit:"每项", price:0 },
-    { id:"preliminaries-floor-protection-flysheet", name:"地面保护膜", nameEn:"Floor protection flysheet", unit:"每项", price:0 },
-  ]},
-];
 
-const COMPANY = {
-  name:"IDS",
-  sub:"Interior Design Studio · Renovation & Furnishing Quotation",
-  phone:"012-345 6789", // TODO: 请替换为实际联系电话
-  waNumber:"60123456789" // TODO: 请替换为实际 WhatsApp 号码（国际格式，不带 + 或 00）
-};
+const DATA = [{"id": "cat0", "name": "Foyer", "cn": "玄关", "items": [{"id": "0-0", "name": "Smart lock", "unit": "unit", "price": 1200.0}, {"id": "0-1", "name": "Grill Door", "unit": "unit", "price": 1500.0}, {"id": "0-2", "name": "Loose shoe cabinet", "unit": "ft", "price": 400.0}, {"id": "0-3", "name": "Build in Shoe cabinet (ft)", "unit": "ft", "price": 550.0}]}, {"id": "cat1", "name": "Living area", "cn": "客厅", "items": [{"id": "1-0", "name": "Loose tv console", "unit": "ft", "price": 900.0}, {"id": "1-1", "name": "Loose tv console veneer", "unit": "ft", "price": 1500.0}, {"id": "1-2", "name": "3 seater sofa", "unit": "unit", "price": 2500.0}, {"id": "1-3", "name": "3 seater sofa premium", "unit": "unit", "price": 3200.0}, {"id": "1-4", "name": "coffee table", "unit": "unit", "price": 500.0}, {"id": "1-5", "name": "TV Console build in", "unit": "ft", "price": 340.0}, {"id": "1-6", "name": "Display tall cabinet", "unit": "ft", "price": 500.0}, {"id": "1-7", "name": "Display tall cabinet end panel (pieces)", "unit": "ft", "price": 300.0}, {"id": "1-8", "name": "Display tall cabinet glass door", "unit": "ft", "price": 60.0}, {"id": "1-9", "name": "Display tall cabinet led", "unit": "ft", "price": 400.0}, {"id": "1-10", "name": "TV Back panel 8ft L x6ft H loose", "unit": "unit", "price": 1800.0}, {"id": "1-11", "name": "TV Back panel build in (min 24 sf)", "unit": "ft", "price": 50.0}, {"id": "1-12", "name": "tatami", "unit": "ft", "price": 50.0}]}, {"id": "cat2", "name": "Curtain", "cn": "窗帘", "items": [{"id": "2-0", "name": "Single layer", "unit": "unit", "price": 2200.0}, {"id": "2-1", "name": "Double layer", "unit": "unit", "price": 2800.0}, {"id": "2-2", "name": "Zebra blind", "unit": "unit", "price": 500.0}]}, {"id": "cat3", "name": "Air conditioner", "cn": "冷气", "items": [{"id": "3-0", "name": "Haier 1.0 non inverter", "unit": "unit", "price": 1500.0}, {"id": "3-1", "name": "Haier 1.0 non inverter + piping", "unit": "unit", "price": 1900.0}, {"id": "3-2", "name": "install aircon", "unit": "unit", "price": 250.0}, {"id": "3-3", "name": "install aircon + piping (6ft)", "unit": "unit", "price": 400.0}, {"id": "3-4", "name": "aircon piping extra (ft)", "unit": "ft", "price": 25.0}]}, {"id": "cat4", "name": "Fan", "cn": "风扇", "items": [{"id": "4-0", "name": "install fan", "unit": "unit", "price": 80.0}, {"id": "4-1", "name": "fan with remote 56 inch", "unit": "unit", "price": 400.0}, {"id": "4-2", "name": "fan with remote 46 inch", "unit": "unit", "price": 450.0}, {"id": "4-3", "name": "2 in1 fan 46", "unit": "unit", "price": 450.0}]}, {"id": "cat5", "name": "Lighting", "cn": "灯饰", "items": [{"id": "5-0", "name": "install light", "unit": "unit", "price": 30.0}, {"id": "5-1", "name": "surface lighting 12W (8 inch )", "unit": "unit", "price": 60.0}, {"id": "5-2", "name": "surface lighting 18W (8 inch )", "unit": "unit", "price": 60.0}, {"id": "5-3", "name": "downlight ( 6 inch )", "unit": "unit", "price": 60.0}, {"id": "5-4", "name": "track light", "unit": "unit", "price": 80.0}, {"id": "5-5", "name": "door bell", "unit": "unit", "price": 80.0}, {"id": "5-6", "name": "led strip", "unit": "unit", "price": 300.0}, {"id": "5-7", "name": "magnetic light", "unit": "unit", "price": 300.0}, {"id": "5-8", "name": "supply & install new socket 13A", "unit": "unit", "price": 150.0}, {"id": "5-9", "name": "supply & install new socket 16A", "unit": "unit", "price": 150.0}, {"id": "5-10", "name": "supply & install new socket 20A", "unit": "unit", "price": 150.0}, {"id": "5-11", "name": "supply & install new 2 gang switch", "unit": "unit", "price": 150.0}, {"id": "5-12", "name": "supply & install new 3 gang switch", "unit": "unit", "price": 150.0}, {"id": "5-13", "name": "supply & install new 4 gang switch", "unit": "unit", "price": 150.0}]}, {"id": "cat6", "name": "Plaster/Partition", "cn": "石膏板 / 隔间", "items": [{"id": "6-0", "name": "Partition (sf)", "unit": "ft", "price": 28.0}, {"id": "6-1", "name": "Submeter (unit)", "unit": "unit", "price": 330.0}, {"id": "6-2", "name": "Plaster ceiling (sf)", "unit": "ft", "price": 7.0}]}, {"id": "cat7", "name": "Painting", "cn": "油漆", "items": [{"id": "7-0", "name": "Feature wall", "unit": "unit", "price": 500.0}, {"id": "7-1", "name": "whole house", "unit": "unit", "price": 3000.0}, {"id": "7-2", "name": "3ft Fluted wall panel with led", "unit": "unit", "price": 900.0}, {"id": "7-3", "name": "PU stone board (10x10ft)", "unit": "unit", "price": 1700.0}]}, {"id": "cat8", "name": "Dining", "cn": "餐厅", "items": [{"id": "8-0", "name": "Dining table & chair", "unit": "unit", "price": 900.0}, {"id": "8-1", "name": "chair", "unit": "unit", "price": 150.0}, {"id": "8-2", "name": "Dining table & chair 6 seater", "unit": "unit", "price": 1200.0}, {"id": "8-3", "name": "Pendant light", "unit": "unit", "price": 300.0}]}, {"id": "cat9", "name": "Bathroom", "cn": "浴室", "items": [{"id": "9-0", "name": "Water Heater joven / panasonic", "unit": "unit", "price": 400.0}, {"id": "9-1", "name": "wall cabinet & mirror (plywood)", "unit": "unit", "price": 400.0}, {"id": "9-2", "name": "sink cabinet", "unit": "unit", "price": 500.0}, {"id": "9-3", "name": "quartz stone top with vanity", "unit": "unit", "price": 500.0}, {"id": "9-4", "name": "Mirror and tower rack", "unit": "unit", "price": 100.0}, {"id": "9-5", "name": "Shower Screen", "unit": "unit", "price": 1200.0}]}, {"id": "cat10", "name": "Kitchen", "cn": "厨房", "items": [{"id": "10-0", "name": "Base unit with quartz stone", "unit": "ft", "price": 550.0}, {"id": "10-1", "name": "Plumbing and Electrician (1 Job)", "unit": "unit", "price": 520.0}, {"id": "10-2", "name": "Kitchen Backsplash (1 Job)", "unit": "unit", "price": 450.0}, {"id": "10-3", "name": "Build in dish rack", "unit": "unit", "price": 150.0}, {"id": "10-4", "name": "Wall unit 700m H", "unit": "ft", "price": 380.0}, {"id": "10-5", "name": "Wall unit full height H", "unit": "ft", "price": 500.0}, {"id": "10-6", "name": "Box up wall unit", "unit": "ft", "price": 300.0}, {"id": "10-7", "name": "Tall unit", "unit": "ft", "price": 500.0}, {"id": "10-8", "name": "Tall unit end panel", "unit": "ft", "price": 300.0}, {"id": "10-9", "name": "Island", "unit": "ft", "price": 570.0}, {"id": "10-10", "name": "Sink", "unit": "unit", "price": 700.0}, {"id": "10-11", "name": "Bifold door", "unit": "unit", "price": 1600.0}]}, {"id": "cat11", "name": "Yard", "cn": "后院", "items": [{"id": "11-0", "name": "Grill", "unit": "unit", "price": 1600.0}, {"id": "11-1", "name": "Glass window", "unit": "unit", "price": 1600.0}, {"id": "11-2", "name": "Base unit with quartz stone", "unit": "ft", "price": 550.0}, {"id": "11-3", "name": "Wall unit", "unit": "ft", "price": 380.0}, {"id": "11-4", "name": "Exhaust fan", "unit": "unit", "price": 150.0}, {"id": "11-5", "name": "Sink", "unit": "unit", "price": 700.0}, {"id": "11-6", "name": "invisible grill", "unit": "unit", "price": 1600.0}]}, {"id": "cat12", "name": "Master room", "cn": "主人房", "items": [{"id": "12-0", "name": "King Size divan & mattress", "unit": "unit", "price": 1800.0}, {"id": "12-1", "name": "Queen Size divan & mattress", "unit": "unit", "price": 1800.0}, {"id": "12-2", "name": "Loose study table & chair", "unit": "unit", "price": 400.0}, {"id": "12-3", "name": "Loose 4x6 ft wardrobe", "unit": "unit", "price": 800.0}, {"id": "12-4", "name": "Loose 4x8 ft wardrobe", "unit": "unit", "price": 1200.0}, {"id": "12-5", "name": "Swing door wardrobe (ft)", "unit": "ft", "price": 700.0}, {"id": "12-6", "name": "Sliding door wardrobe (ft)", "unit": "ft", "price": 800.0}, {"id": "12-7", "name": "Side table (unit)", "unit": "unit", "price": 240.0}, {"id": "12-8", "name": "Headboard (sf)", "unit": "ft", "price": 70.0}, {"id": "12-9", "name": "Tatami platform (sf)", "unit": "ft", "price": 52.0}, {"id": "12-10", "name": "Tatami drawers (unit)", "unit": "unit", "price": 100.0}, {"id": "12-11", "name": "Dresser table (ft)", "unit": "ft", "price": 300.0}, {"id": "12-12", "name": "Study table (ft)", "unit": "ft", "price": 300.0}, {"id": "12-13", "name": "Study table drawers (unit)", "unit": "unit", "price": 200.0}, {"id": "12-14", "name": "Base unit wardrobe (ft)", "unit": "ft", "price": 400.0}]}, {"id": "cat13", "name": "Bedroom2", "cn": "睡房 2", "items": [{"id": "13-0", "name": "Queen Size divan & mattress", "unit": "unit", "price": 1800.0}, {"id": "13-1", "name": "Loose study table & chair", "unit": "unit", "price": 400.0}, {"id": "13-2", "name": "Loose 4x6 ft wardrobe", "unit": "unit", "price": 800.0}, {"id": "13-3", "name": "Loose 4x8 ft wardrobe", "unit": "unit", "price": 1200.0}, {"id": "13-4", "name": "Swing door wardrobe (ft)", "unit": "ft", "price": 700.0}, {"id": "13-5", "name": "Sliding door wardrobe (ft)", "unit": "ft", "price": 800.0}, {"id": "13-6", "name": "Side table (unit)", "unit": "unit", "price": 240.0}, {"id": "13-7", "name": "Headboard (sf)", "unit": "ft", "price": 70.0}, {"id": "13-8", "name": "Tatami platform (sf)", "unit": "ft", "price": 52.0}, {"id": "13-9", "name": "Tatami drawers (unit)", "unit": "unit", "price": 100.0}, {"id": "13-10", "name": "Dresser table (ft)", "unit": "ft", "price": 300.0}, {"id": "13-11", "name": "Study table (ft)", "unit": "ft", "price": 300.0}, {"id": "13-12", "name": "Study table drawers (unit)", "unit": "unit", "price": 200.0}, {"id": "13-13", "name": "Base unit wardrobe (ft)", "unit": "ft", "price": 400.0}]}, {"id": "cat14", "name": "Bedroom3", "cn": "睡房 3", "items": [{"id": "14-0", "name": "Queen Size divan & mattress", "unit": "unit", "price": 1800.0}, {"id": "14-1", "name": "Loose study table & chair", "unit": "unit", "price": 400.0}, {"id": "14-2", "name": "Loose 4x6 ft wardrobe", "unit": "unit", "price": 800.0}, {"id": "14-3", "name": "Loose 4x8 ft wardrobe", "unit": "unit", "price": 1200.0}, {"id": "14-4", "name": "Swing door wardrobe (ft)", "unit": "ft", "price": 700.0}, {"id": "14-5", "name": "Sliding door wardrobe (ft)", "unit": "ft", "price": 800.0}, {"id": "14-6", "name": "Side table (unit)", "unit": "unit", "price": 240.0}, {"id": "14-7", "name": "Headboard (sf)", "unit": "ft", "price": 70.0}, {"id": "14-8", "name": "Tatami platform (sf)", "unit": "ft", "price": 52.0}, {"id": "14-9", "name": "Tatami drawers (unit)", "unit": "unit", "price": 100.0}, {"id": "14-10", "name": "Dresser table (ft)", "unit": "ft", "price": 300.0}, {"id": "14-11", "name": "Study table (ft)", "unit": "ft", "price": 300.0}, {"id": "14-12", "name": "Study table drawers (unit)", "unit": "unit", "price": 200.0}, {"id": "14-13", "name": "Base unit wardrobe (ft)", "unit": "ft", "price": 400.0}]}, {"id": "cat15", "name": "Bedroom4", "cn": "睡房 4", "items": [{"id": "15-0", "name": "Queen Size divan & mattress", "unit": "unit", "price": 1800.0}, {"id": "15-1", "name": "Loose study table & chair", "unit": "unit", "price": 400.0}, {"id": "15-2", "name": "Loose 4x6 ft wardrobe", "unit": "unit", "price": 800.0}, {"id": "15-3", "name": "Loose 4x8 ft wardrobe", "unit": "unit", "price": 1200.0}, {"id": "15-4", "name": "Swing door wardrobe (ft)", "unit": "ft", "price": 700.0}, {"id": "15-5", "name": "Sliding door wardrobe (ft)", "unit": "ft", "price": 800.0}, {"id": "15-6", "name": "Side table (unit)", "unit": "unit", "price": 240.0}, {"id": "15-7", "name": "Headboard (sf)", "unit": "ft", "price": 70.0}, {"id": "15-8", "name": "Tatami platform (sf)", "unit": "ft", "price": 52.0}, {"id": "15-9", "name": "Tatami drawers (unit)", "unit": "unit", "price": 100.0}, {"id": "15-10", "name": "Dresser table (ft)", "unit": "ft", "price": 300.0}, {"id": "15-11", "name": "Study table (ft)", "unit": "ft", "price": 300.0}, {"id": "15-12", "name": "Study table drawers (unit)", "unit": "unit", "price": 200.0}, {"id": "15-13", "name": "Base unit wardrobe (ft)", "unit": "ft", "price": 400.0}]}, {"id": "cat16", "name": "Electrical Appliances", "cn": "电器", "items": [{"id": "16-0", "name": "Hood & hob", "unit": "unit", "price": 1400.0}, {"id": "16-1", "name": "Portable Hob", "unit": "unit", "price": 350.0}, {"id": "16-2", "name": "Fridge Midea 200L", "unit": "unit", "price": 1100.0}, {"id": "16-3", "name": "Fridge Midea 280L", "unit": "unit", "price": 1200.0}, {"id": "16-4", "name": "Fridge Sharp 280L", "unit": "unit", "price": 1400.0}, {"id": "16-5", "name": "Fridge Toshiba 360L", "unit": "unit", "price": 2000.0}, {"id": "16-6", "name": "Washing machine Sharp 7.5kg", "unit": "unit", "price": 1000.0}, {"id": "16-7", "name": "Dryer Toshiba 7.0kg", "unit": "unit", "price": 1100.0}, {"id": "16-8", "name": "2in1 Washer Dryer Hisense", "unit": "unit", "price": 2200.0}, {"id": "16-9", "name": "Microwave", "unit": "unit", "price": 450.0}, {"id": "16-10", "name": "Water dispenser", "unit": "unit", "price": 600.0}, {"id": "16-11", "name": "Smart TV 43\"", "unit": "unit", "price": 1600.0}, {"id": "16-12", "name": "Standing Steam Iron (Simplus)", "unit": "unit", "price": 150.0}, {"id": "16-13", "name": "Hairdryer (Simplus)", "unit": "unit", "price": 100.0}, {"id": "16-14", "name": "Rice Cooker", "unit": "unit", "price": 200.0}]}, {"id": "cat17", "name": "Airbnb Decoration & Setup Item", "cn": "Airbnb 装饰摆设", "items": [{"id": "17-0", "name": "Standing Light", "unit": "unit", "price": 200.0}, {"id": "17-1", "name": "Side Table Lamp", "unit": "unit", "price": 90.0}, {"id": "17-2", "name": "Kitchen - Floor Mat (40cm x 120cm)", "unit": "unit", "price": 70.0}, {"id": "17-3", "name": "Bathroom - Floor Mat (40cm x 60cm)", "unit": "unit", "price": 40.0}, {"id": "17-4", "name": "Entrance - Floor Mat", "unit": "unit", "price": 120.0}, {"id": "17-5", "name": "Wall Art Canvas [50cm x 70cm (H)]", "unit": "unit", "price": 160.0}, {"id": "17-6", "name": "Wall Art Canvas [40cm x 50cm (H)]", "unit": "unit", "price": 110.0}, {"id": "17-7", "name": "Wall Art Canvas [30cm x 40cm (H)]", "unit": "unit", "price": 70.0}, {"id": "17-8", "name": "Artificial Fake Plant - Olive (160cm)", "unit": "unit", "price": 180.0}, {"id": "17-9", "name": "Artificial Fake Plant - Others (120cm)", "unit": "unit", "price": 150.0}, {"id": "17-10", "name": "Universal Extension Plug", "unit": "unit", "price": 100.0}, {"id": "17-11", "name": "Carpet Rug (260cm L x 180cm W)", "unit": "unit", "price": 110.0}, {"id": "17-12", "name": "Modern Mirror", "unit": "unit", "price": 250.0}, {"id": "17-13", "name": "Multiple Small Decoration Item (Sets)", "unit": "unit", "price": 350.0}, {"id": "17-14", "name": "Shampoo Bottle Holder", "unit": "unit", "price": 10.0}, {"id": "17-15", "name": "Shampoo Bottle Dispenser", "unit": "unit", "price": 20.0}, {"id": "17-16", "name": "Rubbish Bin", "unit": "unit", "price": 30.0}, {"id": "17-17", "name": "Laundry Basket", "unit": "unit", "price": 40.0}]}, {"id": "cat18", "name": "Airbnb Linens", "cn": "Airbnb 布草寝具", "items": [{"id": "18-0", "name": "Flat Bedsheets (King)", "unit": "unit", "price": 120.0}, {"id": "18-1", "name": "Duvet Cover (King)", "unit": "unit", "price": 180.0}, {"id": "18-2", "name": "Duvet Insert (King)", "unit": "unit", "price": 180.0}, {"id": "18-3", "name": "Mattress Protector (King)", "unit": "unit", "price": 90.0}, {"id": "18-4", "name": "Flat Bedsheets (Queen)", "unit": "unit", "price": 80.0}, {"id": "18-5", "name": "Duvet Cover (Queen)", "unit": "unit", "price": 140.0}, {"id": "18-6", "name": "Duvet Insert (Queen)", "unit": "unit", "price": 100.0}, {"id": "18-7", "name": "Mattress Protector (Queen)", "unit": "unit", "price": 60.0}, {"id": "18-8", "name": "Flat Bedsheets (Single)", "unit": "unit", "price": 0.0}, {"id": "18-9", "name": "Duvet Cover (Single)", "unit": "unit", "price": 0.0}, {"id": "18-10", "name": "Duvet Insert (Single)", "unit": "unit", "price": 0.0}, {"id": "18-11", "name": "Mattress Protector (Single)", "unit": "unit", "price": 0.0}, {"id": "18-12", "name": "Pillow Case", "unit": "unit", "price": 15.0}, {"id": "18-13", "name": "Pillow Polyfibre", "unit": "unit", "price": 50.0}, {"id": "18-14", "name": "Bath Towel White", "unit": "unit", "price": 30.0}]}, {"id": "cat19", "name": "Kitchen Utensils", "cn": "厨房用品", "items": [{"id": "19-0", "name": "Cooking Utensils (4Pcs Set)", "unit": "unit", "price": 40.0}, {"id": "19-1", "name": "Chopping Board", "unit": "unit", "price": 50.0}, {"id": "19-2", "name": "Spoon, Fork, Teaspoon, Chopstick", "unit": "unit", "price": 60.0}, {"id": "19-3", "name": "Cutlery Tray", "unit": "unit", "price": 50.0}, {"id": "19-4", "name": "Drinking Glass", "unit": "unit", "price": 20.0}, {"id": "19-5", "name": "8'' Plate", "unit": "unit", "price": 20.0}, {"id": "19-6", "name": "6'' Bowl", "unit": "unit", "price": 20.0}, {"id": "19-7", "name": "Knife Set (5 Pcs)", "unit": "unit", "price": 120.0}, {"id": "19-8", "name": "Frying Pan (26cm)", "unit": "unit", "price": 80.0}, {"id": "19-9", "name": "Cooking Pot (18cm)", "unit": "unit", "price": 80.0}]}, {"id": "cat20", "name": "Preliminaries", "cn": "预备工程", "items": [{"id": "20-0", "name": "Site protection, protection of material and completed works. Site cleaning and cart away debris.", "unit": "unit", "price": 1200.0}]}];
 
-/* ================== 状态 ================== */
-const state = {
-  qty: {},              // itemId -> quantity
-  discountMode: "percent",
+const STORAGE_KEY = 'ids_reno_quote_v1';
+let state = {
+  client: {name:'',phone:'',address:'',date:'',quoteno:'',preparer:''},
+  qty: {},
+  discountType: 'pct',
   discountValue: 0,
+  openCats: {},
 };
 
-const itemIndex = {};
-CATEGORIES.forEach(cat => cat.items.forEach(it => itemIndex[it.id] = { ...it, catTitle: cat.title }));
+function fmtMoney(n){
+  n = Math.round(n * 100) / 100;
+  return n.toLocaleString('en-MY', {minimumFractionDigits:0, maximumFractionDigits:2});
+}
 
-/* ================== 渲染：分类导航 ================== */
-const chipNav = document.getElementById("chipNav");
-function renderChipNav(){
-  chipNav.innerHTML = "";
-  const allChip = document.createElement("button");
-  allChip.className = "chip active";
-  allChip.textContent = "全部";
-  allChip.dataset.target = "";
-  chipNav.appendChild(allChip);
+function itemById(id){
+  for(const c of DATA){ for(const it of c.items){ if(it.id === id) return it; } }
+  return null;
+}
 
-  CATEGORIES.forEach(cat=>{
-    const chip = document.createElement("button");
-    chip.className = "chip";
-    chip.dataset.target = cat.id;
-    chip.innerHTML = `${cat.title}<span class="n">${cat.items.length}</span>`;
-    chipNav.appendChild(chip);
-  });
+function qtyStep(unit){ return unit === 'ft' ? 0.5 : 1; }
 
-  chipNav.addEventListener("click", e=>{
-    const btn = e.target.closest(".chip");
-    if(!btn) return;
-    chipNav.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
-    btn.classList.add("active");
-    const target = btn.dataset.target;
-    if(target){
-      const el = document.getElementById("cat-"+target);
-      if(el){
-        el.classList.add("open");
-        el.scrollIntoView({behavior:"smooth", block:"start"});
-      }
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      state = Object.assign(state, parsed);
     }
+  }catch(e){}
+  if(!state.client.date){
+    const d = new Date();
+    state.client.date = d.toISOString().slice(0,10);
+  }
+  if(!state.client.quoteno){
+    const d = new Date();
+    const stamp = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+    state.client.quoteno = 'Q' + stamp + '-' + Math.floor(100+Math.random()*900);
+  }
+}
+
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+
+function buildChipNav(){
+  const nav = document.getElementById('chipNav');
+  nav.innerHTML = '';
+  DATA.forEach(cat=>{
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.innerHTML = cat.cn + '<span class="n">' + cat.items.length + '</span>';
+    chip.addEventListener('click', ()=>{
+      document.getElementById(cat.id).scrollIntoView({behavior:'smooth', block:'start'});
+      if(!state.openCats[cat.id]){
+        state.openCats[cat.id] = true;
+        document.getElementById(cat.id).classList.add('open');
+      }
+    });
+    nav.appendChild(chip);
   });
 }
 
-/* ================== 渲染：分类与项目列表 ================== */
-const categoryList = document.getElementById("categoryList");
-function renderCategories(){
-  categoryList.innerHTML = "";
-  CATEGORIES.forEach((cat, idx)=>{
-    const catEl = document.createElement("div");
-    catEl.className = "category" + (idx===0 ? " open" : "");
-    catEl.id = "cat-"+cat.id;
+function categorySubtotal(cat){
+  let t = 0;
+  cat.items.forEach(it=>{ t += (state.qty[it.id]||0) * it.price; });
+  return t;
+}
 
-    const head = document.createElement("div");
-    head.className = "cat-head";
+function buildCategoryList(){
+  const list = document.getElementById('categoryList');
+  list.innerHTML = '';
+  DATA.forEach((cat, idx)=>{
+    const wrap = document.createElement('div');
+    wrap.className = 'category' + (state.openCats[cat.id] ? ' open' : '');
+    wrap.id = cat.id;
+
+    const head = document.createElement('div');
+    head.className = 'cat-head';
     head.innerHTML = `
       <div class="cat-head-left">
-        <span class="cat-num mono">${cat.num}</span>
-        <span class="cat-title">${cat.title}<span class="en">${cat.en}</span></span>
+        <span class="cat-num">${String(idx+1).padStart(2,'0')}</span>
+        <span class="cat-title">${cat.cn}<span class="en">${cat.name}</span></span>
       </div>
       <div class="cat-meta">
-        <span class="cat-subtotal mono" id="catsub-${cat.id}">RM 0.00</span>
-        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <span class="cat-subtotal" data-catsub="${cat.id}">RM 0</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
       </div>`;
-    head.addEventListener("click", ()=> catEl.classList.toggle("open"));
+    head.addEventListener('click', ()=>{
+      wrap.classList.toggle('open');
+      state.openCats[cat.id] = wrap.classList.contains('open');
+      saveState();
+    });
 
-    const body = document.createElement("div");
-    body.className = "cat-body";
+    const body = document.createElement('div');
+    body.className = 'cat-body';
 
     cat.items.forEach(it=>{
-      const row = document.createElement("div");
-      row.className = "item-row";
-      row.id = "row-"+it.id;
-      row.dataset.name = (it.name + " " + it.nameEn).toLowerCase();
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.dataset.itemname = it.name.toLowerCase();
+      row.dataset.itemid = it.id;
+      const qv = state.qty[it.id] || 0;
+      if(qv > 0) row.classList.add('qtyset');
       row.innerHTML = `
-        <div class="item-name">${it.name}<span class="en">${it.nameEn}</span></div>
-        <div class="item-price mono">${it.unit} <b>RM ${it.price.toFixed(2)}</b></div>
+        <div class="item-name">${it.name}</div>
+        <div class="item-price">RM <b>${fmtMoney(it.price)}</b> / ${it.unit}</div>
         <div class="controls-line">
           <div class="qty-control">
-            <button type="button" data-act="dec" data-id="${it.id}">−</button>
-            <input type="number" min="0" value="0" data-id="${it.id}" class="qty-input">
-            <button type="button" data-act="inc" data-id="${it.id}">+</button>
+            <button class="qminus" aria-label="minus">−</button>
+            <input type="number" class="qinput" value="${qv}" min="0" step="${qtyStep(it.unit)}">
+            <button class="qplus" aria-label="plus">+</button>
           </div>
-          <div class="line-total zero mono" id="linetotal-${it.id}">RM 0.00</div>
+          <div class="line-total ${qv>0?'':'zero'}" data-linetotal="${it.id}">RM ${fmtMoney(qv*it.price)}</div>
         </div>`;
       body.appendChild(row);
+
+      const input = row.querySelector('.qinput');
+      const minus = row.querySelector('.qminus');
+      const plus = row.querySelector('.qplus');
+      const step = qtyStep(it.unit);
+
+      function commit(val){
+        val = Math.max(0, val);
+        val = Math.round(val * 100) / 100;
+        state.qty[it.id] = val;
+        input.value = val;
+        row.classList.toggle('qtyset', val>0);
+        const lt = row.querySelector('[data-linetotal]');
+        lt.textContent = 'RM ' + fmtMoney(val*it.price);
+        lt.classList.toggle('zero', val<=0);
+        refreshAll();
+      }
+      minus.addEventListener('click', ()=> commit((parseFloat(input.value)||0) - step));
+      plus.addEventListener('click', ()=> commit((parseFloat(input.value)||0) + step));
+      input.addEventListener('change', ()=> commit(parseFloat(input.value)||0));
+      input.addEventListener('input', ()=>{
+        const val = parseFloat(input.value);
+        if(!isNaN(val)){
+          state.qty[it.id] = Math.max(0,val);
+          const lt = row.querySelector('[data-linetotal]');
+          lt.textContent = 'RM ' + fmtMoney(Math.max(0,val)*it.price);
+          refreshTotalsOnly();
+        }
+      });
     });
 
-    catEl.appendChild(head);
-    catEl.appendChild(body);
-    categoryList.appendChild(catEl);
-  });
-
-  categoryList.addEventListener("click", e=>{
-    const btn = e.target.closest("button[data-act]");
-    if(!btn) return;
-    const id = btn.dataset.id;
-    const input = categoryList.querySelector(`.qty-input[data-id="${id}"]`);
-    let val = parseInt(input.value)||0;
-    val = btn.dataset.act === "inc" ? val+1 : Math.max(0, val-1);
-    input.value = val;
-    setQty(id, val);
-  });
-
-  categoryList.addEventListener("input", e=>{
-    if(!e.target.classList.contains("qty-input")) return;
-    const id = e.target.dataset.id;
-    let val = parseInt(e.target.value)||0;
-    if(val < 0) val = 0;
-    setQty(id, val);
+    wrap.appendChild(head);
+    wrap.appendChild(body);
+    list.appendChild(wrap);
   });
 }
 
-/* ================== 数量与计算逻辑 ================== */
-function setQty(id, qty){
-  state.qty[id] = qty;
-  const row = document.getElementById("row-"+id);
-  const lt = document.getElementById("linetotal-"+id);
-  const price = itemIndex[id].price;
-  const total = price*qty;
-  lt.textContent = "RM " + total.toFixed(2);
-  lt.classList.toggle("zero", qty===0);
-  row.classList.toggle("qtyset", qty>0);
-  updateAll();
+function updateCategorySubtotals(){
+  DATA.forEach(cat=>{
+    const el = document.querySelector(`[data-catsub="${cat.id}"]`);
+    if(!el) return;
+    const t = categorySubtotal(cat);
+    el.textContent = 'RM ' + fmtMoney(t);
+    el.classList.toggle('has', t>0);
+  });
 }
 
-function getSelectedItems(){
-  return Object.entries(state.qty)
-    .filter(([id,q])=>q>0)
-    .map(([id,q])=>({ ...itemIndex[id], id, qty:q, lineTotal: itemIndex[id].price*q }));
+function computeSubtotal(){
+  let t = 0;
+  DATA.forEach(cat=> cat.items.forEach(it=>{ t += (state.qty[it.id]||0) * it.price; }));
+  return t;
+}
+function computeDiscount(subtotal){
+  const v = parseFloat(state.discountValue) || 0;
+  if(state.discountType === 'pct') return subtotal * Math.min(Math.max(v,0),100) / 100;
+  return Math.min(Math.max(v,0), subtotal);
 }
 
-function computeTotals(){
-  const selected = getSelectedItems();
-  const subtotal = selected.reduce((s,it)=>s+it.lineTotal,0);
-  let discountAmt = 0;
-  if(state.discountMode === "percent"){
-    discountAmt = subtotal * (Math.min(state.discountValue,100)/100);
-  } else {
-    discountAmt = Math.min(state.discountValue, subtotal);
+function selectedItems(){
+  const out = [];
+  DATA.forEach(cat=>{
+    const items = cat.items.filter(it => (state.qty[it.id]||0) > 0);
+    if(items.length) out.push({cat, items});
+  });
+  return out;
+}
+
+function renderSummaryList(targetId){
+  const el = document.getElementById(targetId);
+  const sel = selectedItems();
+  if(!sel.length){
+    el.innerHTML = '<div class="summary-empty">尚未选择任何项目<br>请在左侧菜单勾选数量</div>';
+    return;
   }
-  const grand = Math.max(0, subtotal - discountAmt);
-  return { selected, subtotal, discountAmt, grand };
-}
-
-function fmt(n){ return "RM " + n.toFixed(2); }
-
-function updateAll(){
-  const { selected, subtotal, discountAmt, grand } = computeTotals();
-
-  // category subtotals
-  CATEGORIES.forEach(cat=>{
-    const sum = cat.items.reduce((s,it)=> s + (state.qty[it.id]||0)*it.price, 0);
-    const el = document.getElementById("catsub-"+cat.id);
-    el.textContent = fmt(sum);
-    el.classList.toggle("has", sum>0);
-  });
-
-  // pill count
-  const count = selected.reduce((s,it)=>s+it.qty,0);
-  document.getElementById("pillCount").textContent = count + " 项已选";
-
-  // summary lists (desktop + mobile)
-  [document.getElementById("summaryList"), document.getElementById("summaryListMobile")].forEach(list=>{
-    list.innerHTML = "";
-    if(selected.length===0){
-      list.innerHTML = `<div class="summary-empty">尚未选择任何项目<br>点击左侧项目旁的数量按钮开始添加</div>`;
-      return;
-    }
-    selected.forEach(it=>{
-      const row = document.createElement("div");
-      row.className = "summary-row";
-      row.innerHTML = `<span class="nm">${it.name} <span style="color:var(--slate);font-weight:400;">${it.nameEn}</span></span><span class="qy mono">×${it.qty} · ${fmt(it.lineTotal)}</span>`;
-      list.appendChild(row);
+  let html = '';
+  sel.forEach(({cat, items})=>{
+    items.forEach(it=>{
+      const q = state.qty[it.id];
+      html += `<div class="summary-row"><span class="nm">${it.name}</span><span class="qy">×${q}</span></div>`;
     });
   });
-
-  // totals (desktop + mobile)
-  document.getElementById("subtotalVal").textContent = fmt(subtotal);
-  document.getElementById("subtotalValMobile").textContent = fmt(subtotal);
-  document.getElementById("discountVal").textContent = "- " + fmt(discountAmt);
-  document.getElementById("discountValMobile").textContent = "- " + fmt(discountAmt);
-  document.getElementById("grandVal").textContent = grand.toFixed(2);
-  document.getElementById("grandValMobile").textContent = grand.toFixed(2);
-  document.getElementById("mobarVal").textContent = fmt(grand);
+  el.innerHTML = html;
 }
 
-/* ================== 折扣控件 ================== */
-function wireDiscountControls(segSelector, inputEl){
-  const seg = document.querySelector(segSelector);
-  seg.querySelectorAll("button").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      seg.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      state.discountMode = btn.dataset.mode;
-      syncDiscountInputs();
-      updateAll();
+function refreshTotalsOnly(){
+  const subtotal = computeSubtotal();
+  const discount = computeDiscount(subtotal);
+  const grand = Math.max(0, subtotal - discount);
+  const count = Object.values(state.qty).filter(v=>v>0).length;
+
+  document.getElementById('topCount').textContent = count + ' 项已选';
+  document.getElementById('moCount').textContent = count;
+  document.getElementById('moTotal').textContent = 'RM ' + fmtMoney(grand);
+
+  ['sumSubtotal','sumSubtotalM'].forEach(id=> document.getElementById(id).textContent = 'RM ' + fmtMoney(subtotal));
+  ['sumDiscount','sumDiscountM'].forEach(id=> document.getElementById(id).textContent = '- RM ' + fmtMoney(discount));
+  document.getElementById('sumGrand').innerHTML = '<small>RM</small>' + fmtMoney(grand);
+  document.getElementById('sumGrandM').innerHTML = '<small>RM</small>' + fmtMoney(grand);
+}
+
+function refreshAll(){
+  updateCategorySubtotals();
+  renderSummaryList('summaryList');
+  renderSummaryList('sheetList');
+  refreshTotalsOnly();
+  saveState();
+}
+
+function bindClientFields(){
+  const map = {cf_name:'name', cf_phone:'phone', cf_address:'address', cf_date:'date', cf_quoteno:'quoteno', cf_preparer:'preparer'};
+  Object.keys(map).forEach(id=>{
+    const el = document.getElementById(id);
+    el.value = state.client[map[id]] || '';
+    el.addEventListener('input', ()=>{ state.client[map[id]] = el.value; saveState(); });
+  });
+}
+
+function bindDiscountControls(){
+  const pairs = [
+    ['discPct','discFix','discValue'],
+    ['discPctM','discFixM','discValueM'],
+  ];
+  pairs.forEach(([pctId,fixId,valId])=>{
+    const pctBtn = document.getElementById(pctId);
+    const fixBtn = document.getElementById(fixId);
+    const valInput = document.getElementById(valId);
+    valInput.value = state.discountValue;
+    pctBtn.classList.toggle('active', state.discountType==='pct');
+    fixBtn.classList.toggle('active', state.discountType==='fix');
+    pctBtn.addEventListener('click', ()=>{ state.discountType='pct'; syncDiscountUI(); refreshTotalsOnly(); saveState(); });
+    fixBtn.addEventListener('click', ()=>{ state.discountType='fix'; syncDiscountUI(); refreshTotalsOnly(); saveState(); });
+    valInput.addEventListener('input', ()=>{
+      state.discountValue = parseFloat(valInput.value)||0;
+      pairs.forEach(([,,vid])=>{ if(vid!==valId) document.getElementById(vid).value = state.discountValue; });
+      refreshTotalsOnly(); saveState();
     });
   });
-  inputEl.addEventListener("input", ()=>{
-    state.discountValue = parseFloat(inputEl.value)||0;
-    syncDiscountInputs();
-    updateAll();
-  });
 }
-function syncDiscountInputs(){
-  document.getElementById("discountInput").value = state.discountValue;
-  document.getElementById("discountInputMobile").value = state.discountValue;
-  document.querySelectorAll(".seg button").forEach(b=>{
-    b.classList.toggle("active", b.dataset.mode===state.discountMode);
-  });
+function syncDiscountUI(){
+  document.getElementById('discPct').classList.toggle('active', state.discountType==='pct');
+  document.getElementById('discFix').classList.toggle('active', state.discountType==='fix');
+  document.getElementById('discPctM').classList.toggle('active', state.discountType==='pct');
+  document.getElementById('discFixM').classList.toggle('active', state.discountType==='fix');
 }
 
-/* ================== 搜索 ================== */
-document.getElementById("searchInput").addEventListener("input", e=>{
-  const q = e.target.value.trim().toLowerCase();
-  document.querySelectorAll(".category").forEach(catEl=>{
-    let visibleCount = 0;
-    catEl.querySelectorAll(".item-row").forEach(row=>{
-      const match = !q || row.dataset.name.includes(q);
-      row.classList.toggle("hidden", !match);
-      if(match) visibleCount++;
+function bindSearch(){
+  const input = document.getElementById('searchInput');
+  input.addEventListener('input', ()=>{
+    const q = input.value.trim().toLowerCase();
+    const cats = document.querySelectorAll('.category');
+    cats.forEach(catEl=>{
+      let anyMatch = false;
+      const rows = catEl.querySelectorAll('.item-row');
+      rows.forEach(row=>{
+        const match = !q || row.dataset.itemname.includes(q);
+        row.style.display = match ? '' : 'none';
+        if(match) anyMatch = true;
+      });
+      catEl.style.display = anyMatch ? '' : 'none';
+      if(q && anyMatch){ catEl.classList.add('open'); }
     });
-    catEl.classList.toggle("hidden", visibleCount===0);
-    if(q && visibleCount>0) catEl.classList.add("open");
   });
-});
+}
 
-/* ================== 移动端摘要抽屉 ================== */
-const sheet = document.getElementById("sheet");
-const sheetBackdrop = document.getElementById("sheetBackdrop");
-function openSheet(){ sheet.classList.add("show"); sheetBackdrop.classList.add("show"); }
-function closeSheet(){ sheet.classList.remove("show"); sheetBackdrop.classList.remove("show"); }
-document.getElementById("btnOpenSheet").addEventListener("click", openSheet);
-document.getElementById("btnCloseSheet").addEventListener("click", closeSheet);
-sheetBackdrop.addEventListener("click", closeSheet);
+function bindExpandCollapse(){
+  document.getElementById('expandAllBtn').addEventListener('click', ()=>{
+    document.querySelectorAll('.category').forEach(c=>{ c.classList.add('open'); state.openCats[c.id]=true; });
+    saveState();
+  });
+  document.getElementById('collapseAllBtn').addEventListener('click', ()=>{
+    document.querySelectorAll('.category').forEach(c=>{ c.classList.remove('open'); state.openCats[c.id]=false; });
+    saveState();
+  });
+}
 
-/* ================== 重置 ================== */
-document.getElementById("btnReset").addEventListener("click", ()=>{
-  if(!confirm("确定要清空所有已选项目及客户信息吗？")) return;
-  state.qty = {};
-  state.discountValue = 0;
-  syncDiscountInputs();
-  document.querySelectorAll(".qty-input").forEach(inp=>inp.value=0);
-  document.querySelectorAll(".line-total").forEach(el=>{ el.textContent="RM 0.00"; el.classList.add("zero"); });
-  document.querySelectorAll(".item-row").forEach(el=>el.classList.remove("qtyset"));
-  ["cName","cPhone","cAddress","cDate"].forEach(id=>document.getElementById(id).value="");
-  updateAll();
-});
+function bindSheet(){
+  const backdrop = document.getElementById('sheetBackdrop');
+  const sheet = document.getElementById('sheet');
+  function open(){ backdrop.classList.add('show'); sheet.classList.add('show'); }
+  function close(){ backdrop.classList.remove('show'); sheet.classList.remove('show'); }
+  document.getElementById('openSheetBtn').addEventListener('click', open);
+  document.getElementById('closeSheetBtn').addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+}
 
-/* ================== 生成报价单（打印视图） ================== */
-const appView = document.getElementById("appView");
-const quoteView = document.getElementById("quoteView");
-const qvPage = document.getElementById("qvPage");
+function bindReset(){
+  document.getElementById('resetBtn').addEventListener('click', ()=>{
+    if(!confirm('确定要清空所有已选项目及客户资料吗？此操作无法复原。')) return;
+    state.qty = {};
+    state.discountValue = 0;
+    state.discountType = 'pct';
+    state.client = {name:'',phone:'',address:'',date:new Date().toISOString().slice(0,10),quoteno:'',preparer:''};
+    loadStateQuoteNoOnly();
+    localStorage.removeItem(STORAGE_KEY);
+    document.querySelectorAll('.qinput').forEach(i=>i.value=0);
+    buildCategoryList();
+    bindDiscountControls();
+    bindClientFields();
+    refreshAll();
+  });
+}
+function loadStateQuoteNoOnly(){
+  const d = new Date();
+  const stamp = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+  state.client.quoteno = 'Q' + stamp + '-' + Math.floor(100+Math.random()*900);
+}
 
-function buildQuoteHTML(){
-  const { selected, subtotal, discountAmt, grand } = computeTotals();
-  const cName = document.getElementById("cName").value || "—";
-  const cPhone = document.getElementById("cPhone").value || "—";
-  const cAddress = document.getElementById("cAddress").value || "—";
-  const cDate = document.getElementById("cDate").value || new Date().toISOString().slice(0,10);
-  const quoteNo = "Q" + Date.now().toString().slice(-8);
+function renderQuoteView(){
+  const sel = selectedItems();
+  const subtotal = computeSubtotal();
+  const discount = computeDiscount(subtotal);
+  const grand = Math.max(0, subtotal - discount);
+  const c = state.client;
 
-  if(selected.length===0){
-    return `<div class="qv-empty">尚未选择任何项目，请返回选择后再生成报价单。</div>`;
-  }
+  let catHtml = '';
+  sel.forEach(({cat, items})=>{
+    let rows = '';
+    items.forEach(it=>{
+      const q = state.qty[it.id];
+      rows += `<tr><td>${it.name}</td><td class="qty">${q} ${it.unit}</td><td class="price">RM ${fmtMoney(it.price)}</td><td class="tot">RM ${fmtMoney(q*it.price)}</td></tr>`;
+    });
+    catHtml += `<div class="qv-cat"><h4>${cat.cn} / ${cat.name}</h4><table class="qv-table">${rows}</table></div>`;
+  });
 
-  // group selected items back by category, preserving order
-  const grouped = CATEGORIES.map(cat=>{
-    const items = selected.filter(it=>it.catTitle===cat.title);
-    return { title: cat.title, items };
-  }).filter(g=>g.items.length>0);
+  const discountLabel = state.discountType==='pct'
+    ? `折扣 (${state.discountValue || 0}%)`
+    : `折扣 (RM ${fmtMoney(state.discountValue||0)})`;
 
-  let catsHTML = grouped.map(g=>`
-    <div class="qv-cat">
-      <h4>${g.title}</h4>
-      <table class="qv-table">
-        <tbody>
-          ${g.items.map(it=>`
-            <tr>
-              <td>${it.name}<br><span style="color:var(--slate);font-size:11px;">${it.nameEn}</span></td>
-              <td class="qty">×${it.qty}</td>
-              <td class="price">${fmt(it.price)}</td>
-              <td class="tot">${fmt(it.lineTotal)}</td>
-            </tr>`).join("")}
-        </tbody>
-      </table>
-    </div>`).join("");
-
-  return `
+  document.getElementById('qvPage').innerHTML = `
     <div class="qv-head">
       <div class="qv-brand">
-        <div class="t1">${COMPANY.name}</div>
-        <div class="t2">${COMPANY.sub}</div>
+        <div class="t1">装修工程报价单</div>
+        <div class="t2">Renovation Quotation</div>
       </div>
       <div class="qv-meta">
-        报价单编号<br><b>${quoteNo}</b><br><br>
-        日期<br><b>${cDate}</b>
+        报价编号 Quote No: <b>${c.quoteno||'-'}</b><br>
+        日期 Date: <b>${c.date||'-'}</b><br>
+        制表 Prepared by: <b>${c.preparer||'-'}</b>
       </div>
     </div>
     <div class="qv-clientbox">
-      <div><span>客户姓名</span>${cName}</div>
-      <div><span>联系电话</span>${cPhone}</div>
-      <div style="grid-column:1 / -1;"><span>项目地址</span>${cAddress}</div>
+      <div><span>客户姓名 Client Name</span>${c.name||'-'}</div>
+      <div><span>联络电话 Phone</span>${c.phone||'-'}</div>
+      <div style="grid-column:1/-1;"><span>项目地址 Project Address</span>${c.address||'-'}</div>
     </div>
-    ${catsHTML}
+    ${catHtml || '<div style="padding:20px 0;color:#6E6656;">尚未选择任何项目</div>'}
     <div class="qv-totals">
-      <div class="r"><span>小计 Subtotal</span><span class="mono">${fmt(subtotal)}</span></div>
-      <div class="r"><span>折扣 Discount</span><span class="mono">- ${fmt(discountAmt)}</span></div>
-      <div class="r grand"><span>总计 Total</span><span>${fmt(grand)}</span></div>
+      <div class="r"><span>小计 Subtotal</span><span class="mono">RM ${fmtMoney(subtotal)}</span></div>
+      <div class="r"><span>${discountLabel}</span><span class="mono">- RM ${fmtMoney(discount)}</span></div>
+      <div class="r grand"><span>总价 Grand Total</span><span>RM ${fmtMoney(grand)}</span></div>
     </div>
     <div class="qv-terms">
-      1. 本报价单有效期为 14 天，超过期限请重新询价确认。<br>
-      2. 实际用料规格、颜色及施工细节以现场勘察及双方确认为准。<br>
-      3. 报价不包含现场未列明之隐蔽工程，如有变更将另行报价。<br>
-      4. 联系电话：${COMPANY.phone}
-    </div>`;
+      本报价单仅供参考，实际价格可能因现场勘查、材料版本及设计变更而调整。此报价有效期为 14 天。<br>
+      This quotation is an estimate only. Final pricing is subject to on-site survey, material specification and design changes. Valid for 14 days from the date above.
+    </div>
+  `;
 }
 
-function showQuote(){
-  qvPage.innerHTML = buildQuoteHTML();
-  appView.style.display = "none";
-  quoteView.style.display = "block";
-  closeSheet();
-  window.scrollTo(0,0);
-}
-function backToApp(){
-  quoteView.style.display = "none";
-  appView.style.display = "block";
+function bindGenerate(){
+  function show(){
+    renderQuoteView();
+    document.getElementById('quoteView').style.display = 'block';
+    window.scrollTo(0,0);
+    document.body.style.overflow = 'hidden';
+    document.querySelector('.wrap').style.display = 'none';
+    document.querySelector('.topbar').style.display = 'none';
+  }
+  document.getElementById('generateBtn').addEventListener('click', show);
+  document.getElementById('mobileGenerateBtn').addEventListener('click', show);
+  document.getElementById('sheetGenerateBtn').addEventListener('click', show);
+  document.getElementById('backToEditBtn').addEventListener('click', ()=>{
+    document.getElementById('quoteView').style.display = 'none';
+    document.body.style.overflow = '';
+    document.querySelector('.wrap').style.display = '';
+    document.querySelector('.topbar').style.display = '';
+  });
+  document.getElementById('printBtn').addEventListener('click', ()=> window.print());
 }
 
-document.getElementById("btnQuoteTop").addEventListener("click", showQuote);
-document.getElementById("btnQuoteSide").addEventListener("click", showQuote);
-document.getElementById("btnQuoteMobile").addEventListener("click", showQuote);
-document.getElementById("btnBackToApp").addEventListener("click", backToApp);
-document.getElementById("btnPrint").addEventListener("click", ()=>window.print());
-
-/* ================== WhatsApp 发送摘要 ================== */
-function buildWaText(){
-  const { selected, subtotal, discountAmt, grand } = computeTotals();
-  const cName = document.getElementById("cName").value || "客户";
-  if(selected.length===0) return null;
-  let lines = [`*${COMPANY.name} 装修报价摘要*`, `客户：${cName}`, ""];
-  selected.forEach(it=> lines.push(`• ${it.name} (${it.nameEn}) ×${it.qty} — ${fmt(it.lineTotal)}`));
-  lines.push("");
-  lines.push(`小计：${fmt(subtotal)}`);
-  lines.push(`折扣：- ${fmt(discountAmt)}`);
-  lines.push(`*总计：${fmt(grand)}*`);
-  return lines.join("\n");
+function init(){
+  loadState();
+  buildChipNav();
+  buildCategoryList();
+  bindClientFields();
+  bindDiscountControls();
+  bindSearch();
+  bindExpandCollapse();
+  bindSheet();
+  bindReset();
+  bindGenerate();
+  refreshAll();
 }
-function sendWhatsApp(){
-  const text = buildWaText();
-  if(!text){ alert("请先选择至少一个项目再发送。"); return; }
-  const url = `https://wa.me/${COMPANY.waNumber}?text=${encodeURIComponent(text)}`;
-  window.open(url, "_blank");
-}
-document.getElementById("btnWa").addEventListener("click", sendWhatsApp);
-document.getElementById("btnWaMobile").addEventListener("click", sendWhatsApp);
+init();
 
-/* ================== 初始化 ================== */
-renderChipNav();
-renderCategories();
-wireDiscountControls(".summary.desktop-summary .seg", document.getElementById("discountInput"));
-wireDiscountControls(".sheet .seg", document.getElementById("discountInputMobile"));
-document.getElementById("cDate").value = new Date().toISOString().slice(0,10);
-updateAll();
 </script>
 </body>
 </html>

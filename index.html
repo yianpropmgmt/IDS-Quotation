@@ -361,6 +361,9 @@ table.qv-table td.qty,table.qv-table td.price,table.qv-table td.tot{text-align:r
   .wrap{padding:0;max-width:none;}
 }
 </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1E2A44">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 </head>
 <body>
 <!-- ================= TOP BAR ================= -->
@@ -906,6 +909,13 @@ function init(){
 }
 init();
 
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
